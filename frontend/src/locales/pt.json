@@ -1,0 +1,74 @@
+{
+    "title": "CryptoMonitor - Sistema de Monitoramento de Criptomoedas",
+    "common": {
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Registrar",
+        "search": "Buscar",
+        "home": "Início",
+        "profile": "Perfil",
+        "settings": "Configurações",
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "delete": "Deletar",
+        "edit": "Editar",
+        "loading": "Carregando...",
+        "error": "Erro",
+        "success": "Sucesso",
+        "warning": "Atenção",
+        "info": "Informação",
+        "noData": "Sem dados",
+        "actions": "Ações"
+    },
+    "nav": {
+        "dashboard": "Painel de Controle",
+        "cryptocurrencies": "Criptomoedas",
+        "favorites": "Favoritos",
+        "history": "Histórico",
+        "export": "Exportar",
+        "settings": "Configurações",
+        "profile": "Meu Perfil"
+    },
+    "dashboard": {
+        "title": "Painel de Controle",
+        "topGainers": "Maiores Altas",
+        "topLosers": "Maiores Quedas",
+        "marketCap": "Capitalização de Mercado",
+        "volume24h": "Volume 24h",
+        "dominance": "Dominância"
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Registrar",
+        "forgotPassword": "Esqueceu a senha?",
+        "email": "Email",
+        "password": "Senha",
+        "confirmPassword": "Confirmar Senha",
+        "name": "Nome Completo",
+        "loginSuccess": "Login realizado com sucesso!",
+        "registerSuccess": "Registro realizado com sucesso!",
+        "loginFailed": "Falha no login. Verifique suas credenciais.",
+        "registerFailed": "Falha no registro. Tente novamente."
+    },
+    "crypto": {
+        "symbol": "Símbolo",
+        "price": "Preço",
+        "change24h": "Mudança 24h",
+        "marketCap": "Market Cap",
+        "volume": "Volume",
+        "high24h": "Máxima 24h",
+        "low24h": "Mínima 24h",
+        "supply": "Suprimento",
+        "addFavorite": "Adicionar aos Favoritos",
+        "removeFavorite": "Remover dos Favoritos",
+        "viewChart": "Ver Gráfico"
+    },
+    "footer": {
+        "about": "Sobre",
+        "privacy": "Privacidade",
+        "terms": "Termos",
+        "contact": "Contato",
+        "copyright": "Todos os direitos reservados",
+        "developedBy": "Desenvolvido com ❤️ by DevTeam"
+    }
+}

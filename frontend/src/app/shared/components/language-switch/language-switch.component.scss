@@ -1,0 +1,28 @@
+.language-switch {
+    display: flex;
+    gap: var(--spacing-xs);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    padding: var(--spacing-xs);
+
+    .lang-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-full);
+        transition: all var(--transition-fast);
+
+        &.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        &:hover:not(.active) {
+            color: var(--color-primary-light);
+        }
+    }
+}

@@ -1,0 +1,29 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+
+    .layout-container {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+
+        .layout-main {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: var(--spacing-lg);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .layout {
+        .layout-container {
+            .layout-main {
+                padding: var(--spacing-md);
+            }
+        }
+    }
+}

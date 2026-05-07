@@ -1,0 +1,34 @@
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>CryptoMonitor</h4>
+                <p>Sistema profissional de monitoramento de criptomoedas em tempo real.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Links Úteis</h4>
+                <ul>
+                    <li *ngFor="let link of footerLinks">
+                        <a [href]="link.url">{{ link.label }}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Redes Sociais</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="Twitter">𝕏</a>
+                    <a href="#" class="social-link" title="LinkedIn">in</a>
+                    <a href="#" class="social-link" title="GitHub">gh</a>
+                    <a href="#" class="social-link" title="Discord">dc</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; {{ currentYear }} CryptoMonitor. Todos os direitos reservados.</p>
+            <p class="footer-credit">Desenvolvido com ❤️ by DevTeam</p>
+        </div>
+    </div>
+</footer>

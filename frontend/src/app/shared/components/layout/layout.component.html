@@ -1,0 +1,10 @@
+<div class="layout">
+    <app-navbar (onMenuClick)="toggleSidebar()"></app-navbar>
+    <div class="layout-container">
+        <app-sidebar [open]="sidebarOpen" (onClose)="closeSidebar()"></app-sidebar>
+        <main class="layout-main">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+    <app-footer></app-footer>
+</div>

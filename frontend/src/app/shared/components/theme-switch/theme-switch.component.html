@@ -1,0 +1,4 @@
+<button class="theme-switch" (click)="toggleTheme()" [title]="(currentTheme$ | async) === 'dark' ? 'Claro' : 'Escuro'">
+    <span class="theme-icon" *ngIf="(currentTheme$ | async) === 'dark'">☀️</span>
+    <span class="theme-icon" *ngIf="(currentTheme$ | async) === 'light'">🌙</span>
+</button>

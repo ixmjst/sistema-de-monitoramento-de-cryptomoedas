@@ -1,0 +1,74 @@
+{
+    "title": "CryptoMonitor - Cryptocurrency Monitoring System",
+    "common": {
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register",
+        "search": "Search",
+        "home": "Home",
+        "profile": "Profile",
+        "settings": "Settings",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "warning": "Warning",
+        "info": "Information",
+        "noData": "No data",
+        "actions": "Actions"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "cryptocurrencies": "Cryptocurrencies",
+        "favorites": "Favorites",
+        "history": "History",
+        "export": "Export",
+        "settings": "Settings",
+        "profile": "My Profile"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "topGainers": "Top Gainers",
+        "topLosers": "Top Losers",
+        "marketCap": "Market Capitalization",
+        "volume24h": "24h Volume",
+        "dominance": "Dominance"
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register",
+        "forgotPassword": "Forgot Password?",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "name": "Full Name",
+        "loginSuccess": "Login successful!",
+        "registerSuccess": "Registration successful!",
+        "loginFailed": "Login failed. Check your credentials.",
+        "registerFailed": "Registration failed. Try again."
+    },
+    "crypto": {
+        "symbol": "Symbol",
+        "price": "Price",
+        "change24h": "24h Change",
+        "marketCap": "Market Cap",
+        "volume": "Volume",
+        "high24h": "24h High",
+        "low24h": "24h Low",
+        "supply": "Supply",
+        "addFavorite": "Add to Favorites",
+        "removeFavorite": "Remove from Favorites",
+        "viewChart": "View Chart"
+    },
+    "footer": {
+        "about": "About",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "contact": "Contact",
+        "copyright": "All rights reserved",
+        "developedBy": "Developed with ❤️ by DevTeam"
+    }
+}
