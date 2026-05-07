@@ -1,0 +1,45 @@
+# Arquivos ignorados pelo Git
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Angular
+/dist/
+/.tmp/
+.sass-cache/
+/coverage/
+
+# PHP
+/vendor/
+/.phpunit.result.cache
+
+# Ambiente
+.env
+.env.local
+.env.production
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Banco de dados
+database/*.db
+database/*.sqlite
+
+# Testes
+/tests/coverage/
+
+# Docker
+docker/data/
