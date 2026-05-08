@@ -26,11 +26,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private initializeApp(): void {
         // Inicializar tema
         const savedTheme = localStorage.getItem('theme') || 'dark';
-        this.themeService.setTheme(savedTheme);
+        this.themeService.setTheme(savedTheme as 'light' | 'dark');
 
         // Inicializar idioma
         const savedLanguage = localStorage.getItem('language') || 'pt';
-        this.translateService.setDefaultLanguage(savedLanguage);
+        this.translateService.setDefaultLang(savedLanguage);
         this.translateService.use(savedLanguage);
     }
 }

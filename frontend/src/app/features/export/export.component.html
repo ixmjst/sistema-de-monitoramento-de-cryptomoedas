@@ -1,0 +1,32 @@
+<div class="export-container">
+  <div class="page-header">
+    <h1>📥 {{ 'nav.export' | translate }}</h1>
+    <p class="text-muted">Export your portfolio data</p>
+  </div>
+
+  <div class="export-options">
+    <div class="export-card card">
+      <div class="export-icon">📊</div>
+      <h2>Export to CSV</h2>
+      <p class="text-muted">
+        Download your portfolio data in CSV format. Perfect for spreadsheets and data analysis.
+      </p>
+      <button class="btn btn-primary btn-lg" (click)="exportCSV()" [disabled]="exporting">
+        <span *ngIf="!exporting">Download CSV</span>
+        <span *ngIf="exporting">{{ 'common.loading' | translate }}</span>
+      </button>
+    </div>
+
+    <div class="export-card card">
+      <div class="export-icon">📄</div>
+      <h2>Export to PDF</h2>
+      <p class="text-muted">
+        Generate a professional PDF report of your portfolio with charts and statistics.
+      </p>
+      <button class="btn btn-primary btn-lg" (click)="exportPDF()" [disabled]="exporting">
+        <span *ngIf="!exporting">Download PDF</span>
+        <span *ngIf="exporting">{{ 'common.loading' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>

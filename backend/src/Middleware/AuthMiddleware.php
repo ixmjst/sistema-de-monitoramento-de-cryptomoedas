@@ -22,6 +22,16 @@ class AuthMiddleware
         return $middleware->verify();
     }
 
+    private static function getAuthHeader(): ?string
+    {
+        // PHP built-in server and some Apache configs don't populate
+        // HTTP_AUTHORIZATION automatically — check all possible sources
+        return $_SERVER['HTTP_AUTHORIZATION']
+            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+            ?? (function_exists('getallheaders') ? (getallheaders()['Authorization'] ?? null) : null)
+            ?? null;
+    }
+
     public function verify()
     {
         $method = $_SERVER['REQUEST_METHOD'];
@@ -39,9 +49,9 @@ class AuthMiddleware
             return null;
         }
 
-        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+        $authHeader = self::getAuthHeader();
 
-        if (!$authHeader || !preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+        if (!$authHeader || !preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
             http_response_code(401);
             echo json_encode([
                 'success' => false,
@@ -50,7 +60,7 @@ class AuthMiddleware
             exit;
         }
 
-        $token = $matches[1];
+        $token = trim($matches[1]);
         $payload = JWT::decode($token);
 
         if (!$payload) {
@@ -72,10 +82,10 @@ class AuthMiddleware
 
     public static function getUser()
     {
-        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+        $authHeader = self::getAuthHeader();
 
-        if ($authHeader && preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
-            $payload = JWT::decode($matches[1]);
+        if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
+            $payload = JWT::decode(trim($matches[1]));
             return $payload ?: null;
         }
 

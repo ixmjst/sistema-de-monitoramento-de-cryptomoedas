@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService, User } from '../../../core/services/auth.service';
 
 @Component({
@@ -12,18 +13,25 @@ export class NavbarComponent implements OnInit {
     user$ = this.authService.user$;
     searchQuery = '';
 
-    constructor(private authService: AuthService) { }
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) { }
 
-    ngOnInit(): void {
-        // Inicializar navbar
-    }
+    ngOnInit(): void {}
 
     toggleMenu(): void {
         this.onMenuClick.emit();
     }
 
     onSearch(): void {
-        // Implementar busca
-        console.log('Searching for:', this.searchQuery);
+        if (this.searchQuery.trim()) {
+            this.router.navigate(['/cryptocurrencies'], { queryParams: { q: this.searchQuery } });
+        }
+    }
+
+    logout(): void {
+        this.authService.logout();
+        this.router.navigate(['/auth/login']);
     }
 }

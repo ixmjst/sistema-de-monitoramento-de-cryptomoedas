@@ -1,3 +1,72 @@
+# CryptoMonitor
+
+Sistema web completo para monitoramento de criptomoedas com autenticação JWT, favoritos, histórico e exportação de dados.
+
+## Tecnologias
+
+- **Frontend**: Angular 17 (TypeScript, SCSS)
+- **Backend**: PHP 8.0+ (puro, sem frameworks)
+- **Banco de Dados**: MySQL 8.0+
+- **API Externa**: CoinGecko
+- **Autenticação**: JWT
+
+## Funcionalidades
+
+- Autenticação completa (login/registro com JWT)
+- Dashboard com top gainers/losers e visão geral do mercado
+- Listagem e busca de criptomoedas em tempo real
+- Gerenciamento de favoritos
+- Histórico de atividades
+- Exportação de dados (CSV/PDF)
+- Tema claro/escuro
+- Suporte a múltiplos idiomas (Português/Inglês)
+- Interface responsiva (mobile, tablet, desktop)
+
+---
+
+## Como executar
+
+### Pré-requisitos
+
+- PHP 8.0+
+- Composer
+- MySQL 8.0+
+- Node.js 18+ e npm
+
+---
+
+### 1. Clonar o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd crypto-monitor
+```
+
+---
+
+### 2. Configurar o banco de dados
+
+Acesse o MySQL e execute:
+
+```sql
+CREATE DATABASE crypto_monitor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'crypto_user'@'localhost' IDENTIFIED BY 'senha123';
+GRANT ALL PRIVILEGES ON crypto_monitor.* TO 'crypto_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+---
+
+### 3. Configurar o backend
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com suas credenciais:
+
+```env
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=crypto_monitor
@@ -6,220 +75,143 @@ DB_PASSWORD=senha123
 
 APP_ENV=development
 APP_DEBUG=true
-API_PREFIX=/api/v1
+API_PREFIX=/api
 
-JWT_SECRET=sua_chave_secreta_super_segura_aqui# Sistema de Monitoramento de Criptomoedas
+JWT_SECRET=sua_chave_secreta_super_segura_aqui
+JWT_EXPIRATION=86400
+```
 
-Sistema web completo e profissional para monitoramento de criptomoedas com autenticação, favoritos, histórico e exportação de dados.
+Instale as dependências e execute as migrações:
 
-## 📊 Tecnologias
-- **Frontend**: Angular 17 (TypeScript, SCSS)
-- **Backend**: PHP 8.0+ (Puro)
-- **Banco de Dados**: MySQL 8.0+
-- **API Externa**: CoinGecko
-- **Bibliotecas**: ng2-charts, jsPDF, PapaParse, @ngx-translate
-- **DevOps**: Docker, Git
+```bash
+composer install
+php cli/setup.php migrate
+php cli/setup.php seed
+```
 
-## ✨ Funcionalidades Principais
-- ✅ Sistema completo de autenticação (JWT)
-- ✅ Visualização de preços em tempo real
-- ✅ Gerenciamento de favoritos
-- ✅ Histórico de preços com gráficos
-- ✅ Exportação de dados (CSV/PDF)
-- ✅ Interface responsiva e moderna
-- ✅ Tema claro/escuro
-- ✅ Suporte multi-idioma (Português/Inglês)
-- ⏳ Integração com CoinGecko API
-- ⏳ Sistema de alertas de preço
+Inicie o servidor:
 
-## 🎨 Design System & Paleta de Cores
+```bash
+php -S localhost:8000 -t public
+```
 
-### Tema Escuro (Padrão - Crypto)
-```css
-Primário: #0099ff (Azul Crypto)
-Secundário: #00d4ff (Azul Claro)
-Accent: #00ffb3 (Verde Neon)
-Sucesso: #00d084
-Erro: #ff6b6b
-Aviso: #ffb74d
-Bitcoin: #f7931a
-Ethereum: #627eea
+Teste se está funcionando:
+
+```bash
+curl http://localhost:8000/api/health
+```
+
+---
+
+### 4. Configurar o frontend
+
+Em outro terminal:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Acesse: **http://localhost:4200**
+
+---
+
+### 5. Criar uma conta
+
+Abra o navegador em `http://localhost:4200/auth/register` e crie sua conta, ou use a API diretamente:
+
+```bash
+curl -X POST http://localhost:8000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Seu Nome","email":"seu@email.com","password":"senha123"}'
+```
+
+---
+
+## Estrutura do projeto
+
+```
+crypto-monitor/
+├── backend/
+│   ├── public/          # Entry point (index.php)
+│   ├── src/
+│   │   ├── Config/      # Bootstrap, autoload, database
+│   │   ├── Controllers/ # Auth, Crypto, Favorites, Portfolio, History, Export
+│   │   ├── Models/      # User, Cryptocurrency, Favorite, Portfolio, History
+│   │   ├── Middleware/  # JWT auth middleware
+│   │   ├── Routing/     # Router com 18+ endpoints
+│   │   ├── Services/    # CoinGecko API integration
+│   │   └── Utils/       # JWT, Logger
+│   └── cli/             # Setup e migrations
+├── frontend/
+│   └── src/app/
+│       ├── core/        # Services (Auth, Crypto, Theme, Favorite)
+│       ├── features/    # Dashboard, Cryptocurrencies, Favorites, History, Export, Auth
+│       ├── guards/      # AuthGuard
+│       ├── interceptors/# JWT interceptor
+│       └── shared/      # Layout, Navbar, Sidebar, Footer, ThemeSwitch, LanguageSwitch
+└── database/
+    └── migrations/      # 5 tabelas SQL
+```
+
+---
+
+## API Endpoints
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/api/auth/register` | Registrar usuário | ❌ |
+| POST | `/api/auth/login` | Login | ❌ |
+| GET | `/api/auth/me` | Dados do usuário | ✅ |
+| GET | `/api/cryptocurrencies` | Listar criptomoedas | ✅ |
+| GET | `/api/cryptocurrencies/{id}` | Detalhes | ✅ |
+| GET | `/api/cryptocurrencies/search/{q}` | Buscar | ✅ |
+| GET | `/api/favorites` | Listar favoritos | ✅ |
+| POST | `/api/favorites` | Adicionar favorito | ✅ |
+| DELETE | `/api/favorites/{id}` | Remover favorito | ✅ |
+| GET | `/api/portfolio` | Listar portfólio | ✅ |
+| POST | `/api/portfolio` | Adicionar item | ✅ |
+| GET | `/api/history` | Histórico | ✅ |
+| GET | `/api/export/csv` | Exportar CSV | ✅ |
+| GET | `/api/export/pdf` | Exportar PDF | ✅ |
+| GET | `/api/health` | Health check | ❌ |
+
+---
+
+## Design System
+
+### Tema Escuro (padrão)
+
+```
+Primário:   #0099ff
+Secundário: #00d4ff
+Accent:     #00ffb3
+Sucesso:    #00d084
+Erro:       #ff6b6b
+Aviso:      #ffb74d
 ```
 
 ### Tema Claro
-```css
-Primário: #0066cc (Azul Escuro)
-Fundo: #ffffff
-Texto: #1a1a1a
+
+```
+Primário:   #0066cc
+Fundo:      #ffffff
+Texto:      #1a1a1a
 ```
 
-## 📁 Estrutura do Projeto
+---
 
-### Frontend Angular
-```
-frontend/
-├── src/
-│   ├── app/
-│   │   ├── core/              # Serviços core (Auth, Crypto, Theme)
-│   │   ├── shared/            # Componentes compartilhados
-│   │   │   ├── components/
-│   │   │   │   ├── layout/    # Layout principal
-│   │   │   │   ├── navbar/    # Barra de navegação
-│   │   │   │   ├── sidebar/   # Menu lateral
-│   │   │   │   ├── footer/    # Rodapé
-│   │   │   │   ├── theme-switch/
-│   │   │   │   └── language-switch/
-│   │   ├── features/          # Módulos por funcionalidade
-│   │   │   ├── auth/
-│   │   │   ├── dashboard/
-│   │   │   ├── cryptocurrencies/
-│   │   │   ├── favorites/
-│   │   │   ├── history/
-│   │   │   └── export/
-│   │   ├── models/            # Interfaces TypeScript
-│   │   ├── guards/            # Guards de rota
-│   │   └── interceptors/      # Interceptors HTTP
-│   ├── assets/                # Imagens e ícones
-│   ├── locales/               # Arquivos i18n (pt.json, en.json)
-│   ├── environments/          # Configurações por ambiente
-│   └── styles.scss            # Estilos globais
-├── package.json
-├── angular.json
-└── tsconfig.json
-```
+## Solução de problemas
 
-## 🚀 Instalação Rápida
+**CORS error no frontend**
+Verifique se o backend está rodando em `localhost:8000` e se o `.env` tem `CORS_ORIGIN=http://localhost:4200`.
 
-### Pré-requisitos
-- Node.js 18+ e npm 9+
-- PHP 8.0+
-- MySQL 8.0+
-- Composer 2.0+
+**Erro de conexão com banco**
+Confirme que o MySQL está rodando e as credenciais no `.env` estão corretas.
 
-### Frontend Setup
-```bash
-# Entrar no diretório frontend
-cd frontend
+**Módulo não encontrado (npm)**
+Execute `npm install` dentro da pasta `frontend/`.
 
-# Instalar dependências
-npm install
-
-# Iniciar servidor de desenvolvimento
-npm start
-# Acesso: http://localhost:4200
-```
-
-### Backend Setup
-```bash
-# Entrar no diretório backend
-cd backend
-
-# Instalar dependências
-composer install
-
-# Configurar arquivo .env
-cp .env.example .env
-# Editar .env com suas credenciais do banco
-
-# Iniciar servidor
-php -S localhost:8000 -t public
-# Acesso: http://localhost:8000/api
-```
-
-## 🛠️ Componentes Implementados
-
-### ✅ Core Services
-- `ThemeService` - Gerenciamento de temas (claro/escuro)
-- `AuthService` - Autenticação e gerenciamento de usuários
-- `CryptoService` - Integração com API de criptomoedas
-- `FavoriteService` - Gerenciamento de favoritos
-
-### ✅ Componentes Compartilhados
-- `LayoutComponent` - Layout principal da aplicação
-- `NavbarComponent` - Barra de navegação com busca
-- `SidebarComponent` - Menu lateral responsivo
-- `FooterComponent` - Rodapé com links
-- `ThemeSwitchComponent` - Botão para alternar tema
-- `LanguageSwitchComponent` - Seletor de idioma (PT/EN)
-
-### ✅ Sistema de Tradução (i18n)
-- Suporte completo para Português e Inglês
-- Arquivos de tradução em JSON
-- Carregamento dinâmico via HTTP
-
-### ✅ Estilos Globais
-- Design system completo com variáveis CSS
-- Tema claro/escuro funcional
-- Componentes UI reutilizáveis (botões, cards, inputs, etc)
-- Animações e transições suaves
-- Responsividade total (Desktop, Tablet, Mobile)
-
-## 📋 Comandos Disponíveis
-
-```bash
-# Frontend
-npm start              # Inicia servidor dev (port 4200)
-npm run build         # Build para produção
-npm test              # Executa testes unitários
-npm run lint          # Analisa código
-
-# Backend (em desenvolvimento)
-composer install      # Instala dependências
-php -S localhost:8000 -t public  # Inicia servidor
-```
-
-## 📚 Documentação
-
-- [Arquitetura do Sistema](./docs/architecture/)
-- [API REST Endpoints](./docs/api/)
-- [Manual do Usuário](./docs/user-manual/)
-- [Guia de Desenvolvimento](./DEVELOPMENT.md)
-
-## 🔄 Git Workflow
-
-```bash
-# Criar nova feature
-git checkout -b feature/nome-feature
-
-# Após fazer alterações
-git add .
-git commit -m "feat: descrição da feature"
-git push origin feature/nome-feature
-
-# Criar Pull Request no GitHub
-```
-
-## 📊 Status do Projeto
-
-### Fase 1: ✅ Setup e Infraestrutura
-- ✅ Estrutura de pastas profissional
-- ✅ Repositório Git inicializado
-- ✅ Configuração Angular base
-- ✅ Paleta de cores e tema completo
-- ✅ Componentes de layout (Navbar, Sidebar, Footer)
-- ✅ Sistema de tradução i18n
-- ✅ Tema claro/escuro funcional
-
-### Fase 2: ⏳ Backend Core
-- ⏳ Sistema de rotas PHP
-- ⏳ Conexão com banco de dados
-- ⏳ Middleware básico
-
-### Fase 3: ⏳ Autenticação
-- ⏳ Sistema JWT
-- ⏳ Registro/Login
-
-### Fases 4-12: ⏳ Desenvolvimento contínuo
-
-## 🤝 Contribuição
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
-
-## 📝 Licença
-Este projeto está sob a licença MIT.
-
-## 👥 Autor
-Desenvolvido como projeto educacional de arquitetura de software.
+**Composer não encontrado**
+Instale o Composer em https://getcomposer.org/download/

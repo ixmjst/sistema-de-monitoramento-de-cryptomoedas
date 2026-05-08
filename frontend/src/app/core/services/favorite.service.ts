@@ -13,7 +13,7 @@ export interface Favorite {
     providedIn: 'root',
 })
 export class FavoriteService {
-    private apiUrl = 'http://localhost:8000/api/favorites';
+    private apiUrl = 'http://localhost:8000/api/v1/favorites';
 
     constructor(private http: HttpClient) { }
 

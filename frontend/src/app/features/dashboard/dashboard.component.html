@@ -1,0 +1,132 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>{{ 'dashboard.title' | translate }}</h1>
+    <p class="text-muted">Real-time cryptocurrency market overview</p>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>{{ 'common.loading' | translate }}</p>
+  </div>
+
+  <div class="dashboard-content" *ngIf="!loading">
+    <!-- Market Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3>{{ formatMarketCap(totalMarketCap) }}</h3>
+          <p>{{ 'dashboard.marketCap' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+          <h3>{{ formatMarketCap(totalVolume24h) }}</h3>
+          <p>{{ 'dashboard.volume24h' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🪙</div>
+        <div class="stat-content">
+          <h3>{{ recentCryptos.length }}</h3>
+          <p>Cryptocurrencies</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Gainers & Losers -->
+    <div class="gainers-losers-grid">
+      <div class="card">
+        <div class="card-header">
+          <h2>🚀 {{ 'dashboard.topGainers' | translate }}</h2>
+        </div>
+        <div class="card-body">
+          <div class="crypto-list">
+            <div class="crypto-item" *ngFor="let crypto of topGainers">
+              <div class="crypto-info">
+                <img [src]="crypto.imageUrl" [alt]="crypto.name" class="crypto-icon" *ngIf="crypto.imageUrl">
+                <div class="crypto-icon-placeholder" *ngIf="!crypto.imageUrl">{{ crypto.symbol.charAt(0) }}</div>
+                <div>
+                  <h4>{{ crypto.name }}</h4>
+                  <p class="text-muted">{{ crypto.symbol.toUpperCase() }}</p>
+                </div>
+              </div>
+              <div class="crypto-price">
+                <p class="price">{{ formatPrice(crypto.currentPrice) }}</p>
+                <p [class]="'change ' + getPriceChangeClass(crypto.priceChange24h)">
+                  {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>📉 {{ 'dashboard.topLosers' | translate }}</h2>
+        </div>
+        <div class="card-body">
+          <div class="crypto-list">
+            <div class="crypto-item" *ngFor="let crypto of topLosers">
+              <div class="crypto-info">
+                <img [src]="crypto.imageUrl" [alt]="crypto.name" class="crypto-icon" *ngIf="crypto.imageUrl">
+                <div class="crypto-icon-placeholder" *ngIf="!crypto.imageUrl">{{ crypto.symbol.charAt(0) }}</div>
+                <div>
+                  <h4>{{ crypto.name }}</h4>
+                  <p class="text-muted">{{ crypto.symbol.toUpperCase() }}</p>
+                </div>
+              </div>
+              <div class="crypto-price">
+                <p class="price">{{ formatPrice(crypto.currentPrice) }}</p>
+                <p [class]="'change ' + getPriceChangeClass(crypto.priceChange24h)">
+                  {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Cryptocurrencies -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🪙 Top Cryptocurrencies</h2>
+        <a routerLink="/cryptocurrencies" class="btn btn-secondary btn-sm">View All</a>
+      </div>
+      <div class="card-body">
+        <div class="crypto-table">
+          <div class="table-header">
+            <div class="col-rank">#</div>
+            <div class="col-name">Name</div>
+            <div class="col-price">Price</div>
+            <div class="col-change">24h Change</div>
+            <div class="col-market-cap">Market Cap</div>
+          </div>
+          <div class="table-row" *ngFor="let crypto of recentCryptos; let i = index">
+            <div class="col-rank">{{ i + 1 }}</div>
+            <div class="col-name">
+              <img [src]="crypto.imageUrl" [alt]="crypto.name" class="crypto-icon" *ngIf="crypto.imageUrl">
+              <div class="crypto-icon-placeholder" *ngIf="!crypto.imageUrl">{{ crypto.symbol.charAt(0) }}</div>
+              <div>
+                <h4>{{ crypto.name }}</h4>
+                <p class="text-muted">{{ crypto.symbol.toUpperCase() }}</p>
+              </div>
+            </div>
+            <div class="col-price">{{ formatPrice(crypto.currentPrice) }}</div>
+            <div class="col-change">
+              <span [class]="'badge ' + (crypto.priceChange24h >= 0 ? 'badge-success' : 'badge-danger')">
+                {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
+              </span>
+            </div>
+            <div class="col-market-cap">{{ formatMarketCap(crypto.marketCap || 0) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
