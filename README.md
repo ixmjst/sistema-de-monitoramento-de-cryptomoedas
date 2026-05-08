@@ -1,4 +1,14 @@
-# Sistema de Monitoramento de Criptomoedas
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=crypto_monitor
+DB_USER=crypto_user
+DB_PASSWORD=senha123
+
+APP_ENV=development
+APP_DEBUG=true
+API_PREFIX=/api/v1
+
+JWT_SECRET=sua_chave_secreta_super_segura_aqui# Sistema de Monitoramento de Criptomoedas
 
 Sistema web completo e profissional para monitoramento de criptomoedas com autenticação, favoritos, histórico e exportação de dados.
 

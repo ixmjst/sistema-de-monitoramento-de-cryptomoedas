@@ -1,302 +1,305 @@
 <!-- Visualização de Paleta de Cores - CryptoMonitor -->
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paleta de Cores - CryptoMonitor</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #0A1428;
-      color: #e8eaed;
-      padding: 40px 20px;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-      font-size: 2.5rem;
-      background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .section {
-      margin-bottom: 60px;
-    }
-    
-    .section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #00d4ff;
-    }
-    
-    .color-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-    
-    .color-box {
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
-    }
-    
-    .color-box:hover {
-      transform: translateY(-4px);
-    }
-    
-    .color-sample {
-      height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-    }
-    
-    .color-info {
-      background: #1a2332;
-      padding: 15px;
-    }
-    
-    .color-name {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    
-    .color-value {
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      color: #b0b3b8;
-    }
-    
-    .gradient-box {
-      border-radius: 12px;
-      padding: 30px;
-      color: white;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    }
-    
-    .gradient-primary {
-      background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
-    }
-    
-    .gradient-success {
-      background: linear-gradient(135deg, #00d084 0%, #00ffb3 100%);
-    }
-    
-    .gradient-warning {
-      background: linear-gradient(135deg, #ffb74d 0%, #ffa500 100%);
-    }
-    
-    .gradient-error {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
-    }
-    
-    .gradient-crypto {
-      background: linear-gradient(135deg, #0099ff 0%, #00d4ff 50%, #00ffb3 100%);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paleta de Cores - CryptoMonitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0A1428;
+            color: #e8eaed;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .color-box {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .color-box:hover {
+            transform: translateY(-4px);
+        }
+
+        .color-sample {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .color-info {
+            background: #1a2332;
+            padding: 15px;
+        }
+
+        .color-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .color-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #b0b3b8;
+        }
+
+        .gradient-box {
+            border-radius: 12px;
+            padding: 30px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .gradient-primary {
+            background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
+        }
+
+        .gradient-success {
+            background: linear-gradient(135deg, #00d084 0%, #00ffb3 100%);
+        }
+
+        .gradient-warning {
+            background: linear-gradient(135deg, #ffb74d 0%, #ffa500 100%);
+        }
+
+        .gradient-error {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+        }
+
+        .gradient-crypto {
+            background: linear-gradient(135deg, #0099ff 0%, #00d4ff 50%, #00ffb3 100%);
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>🎨 Paleta de Cores - CryptoMonitor</h1>
-    
-    <!-- Tema Escuro -->
-    <div class="section">
-      <h2>🌙 Tema Escuro (Padrão)</h2>
-      
-      <h3 style="margin: 20px 0 15px; color: #00d4ff; font-size: 1.1rem;">Cores Base</h3>
-      <div class="color-grid">
-        <div class="color-box">
-          <div class="color-sample" style="background: #0A1428;">
-            #0A1428
-          </div>
-          <div class="color-info">
-            <div class="color-name">Bg Primary</div>
-            <div class="color-value">Fundo principal</div>
-          </div>
+    <div class="container">
+        <h1>🎨 Paleta de Cores - CryptoMonitor</h1>
+
+        <!-- Tema Escuro -->
+        <div class="section">
+            <h2>🌙 Tema Escuro (Padrão)</h2>
+
+            <h3 style="margin: 20px 0 15px; color: #00d4ff; font-size: 1.1rem;">Cores Base</h3>
+            <div class="color-grid">
+                <div class="color-box">
+                    <div class="color-sample" style="background: #0A1428;">
+                        #0A1428
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Bg Primary</div>
+                        <div class="color-value">Fundo principal</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #1a2332;">
+                        #1a2332
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Bg Secondary</div>
+                        <div class="color-value">Fundo secundário</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #2c3e50;">
+                        #2c3e50
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Bg Tertiary</div>
+                        <div class="color-value">Fundo terciário</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #3a4a5f;">
+                        #3a4a5f
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Bg Hover</div>
+                        <div class="color-value">Estado hover</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px; color: #00d4ff; font-size: 1.1rem;">Cores Primárias</h3>
+            <div class="color-grid">
+                <div class="color-box">
+                    <div class="color-sample" style="background: #00d4ff;">
+                        #00d4ff
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Primary Light</div>
+                        <div class="color-value">Hover/Accent</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #0099ff;">
+                        #0099ff
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Primary</div>
+                        <div class="color-value">Cor principal</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #0066cc;">
+                        #0066cc
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Primary Dark</div>
+                        <div class="color-value">Ativo/Escuro</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #00ffb3;">
+                        #00ffb3
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Accent</div>
+                        <div class="color-value">Destaque</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px; color: #00d4ff; font-size: 1.1rem;">Cores de Status</h3>
+            <div class="color-grid">
+                <div class="color-box">
+                    <div class="color-sample" style="background: #00d084;">
+                        #00d084
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Success</div>
+                        <div class="color-value">Sucesso/Ganho</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #ffb74d;">
+                        #ffb74d
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Warning</div>
+                        <div class="color-value">Aviso</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #ff6b6b;">
+                        #ff6b6b
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Error</div>
+                        <div class="color-value">Erro/Perda</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #00b4ff;">
+                        #00b4ff
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Info</div>
+                        <div class="color-value">Informação</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 15px; color: #00d4ff; font-size: 1.1rem;">Criptomoedas</h3>
+            <div class="color-grid">
+                <div class="color-box">
+                    <div class="color-sample" style="background: #f7931a;">
+                        #f7931a
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Bitcoin</div>
+                        <div class="color-value">Laranja crypto</div>
+                    </div>
+                </div>
+
+                <div class="color-box">
+                    <div class="color-sample" style="background: #627eea;">
+                        #627eea
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Ethereum</div>
+                        <div class="color-value">Roxo/Violeta</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #1a2332;">
-            #1a2332
-          </div>
-          <div class="color-info">
-            <div class="color-name">Bg Secondary</div>
-            <div class="color-value">Fundo secundário</div>
-          </div>
+
+        <!-- Gradientes -->
+        <div class="section">
+            <h2>🌈 Gradientes</h2>
+            <div class="gradient-box gradient-primary">
+                Gradient Primary (135deg, #0099ff 0%, #00d4ff 100%)
+            </div>
+            <div class="gradient-box gradient-success">
+                Gradient Success (135deg, #00d084 0%, #00ffb3 100%)
+            </div>
+            <div class="gradient-box gradient-warning">
+                Gradient Warning (135deg, #ffb74d 0%, #ffa500 100%)
+            </div>
+            <div class="gradient-box gradient-error">
+                Gradient Error (135deg, #ff6b6b 0%, #ff5252 100%)
+            </div>
+            <div class="gradient-box gradient-crypto">
+                Gradient Crypto (135deg, #0099ff 0%, #00d4ff 50%, #00ffb3 100%)
+            </div>
         </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #2c3e50;">
-            #2c3e50
-          </div>
-          <div class="color-info">
-            <div class="color-name">Bg Tertiary</div>
-            <div class="color-value">Fundo terciário</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #3a4a5f;">
-            #3a4a5f
-          </div>
-          <div class="color-info">
-            <div class="color-name">Bg Hover</div>
-            <div class="color-value">Estado hover</div>
-          </div>
-        </div>
-      </div>
-      
-      <h3 style="margin: 30px 0 15px; color: #00d4ff; font-size: 1.1rem;">Cores Primárias</h3>
-      <div class="color-grid">
-        <div class="color-box">
-          <div class="color-sample" style="background: #00d4ff;">
-            #00d4ff
-          </div>
-          <div class="color-info">
-            <div class="color-name">Primary Light</div>
-            <div class="color-value">Hover/Accent</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #0099ff;">
-            #0099ff
-          </div>
-          <div class="color-info">
-            <div class="color-name">Primary</div>
-            <div class="color-value">Cor principal</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #0066cc;">
-            #0066cc
-          </div>
-          <div class="color-info">
-            <div class="color-name">Primary Dark</div>
-            <div class="color-value">Ativo/Escuro</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #00ffb3;">
-            #00ffb3
-          </div>
-          <div class="color-info">
-            <div class="color-name">Accent</div>
-            <div class="color-value">Destaque</div>
-          </div>
-        </div>
-      </div>
-      
-      <h3 style="margin: 30px 0 15px; color: #00d4ff; font-size: 1.1rem;">Cores de Status</h3>
-      <div class="color-grid">
-        <div class="color-box">
-          <div class="color-sample" style="background: #00d084;">
-            #00d084
-          </div>
-          <div class="color-info">
-            <div class="color-name">Success</div>
-            <div class="color-value">Sucesso/Ganho</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #ffb74d;">
-            #ffb74d
-          </div>
-          <div class="color-info">
-            <div class="color-name">Warning</div>
-            <div class="color-value">Aviso</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #ff6b6b;">
-            #ff6b6b
-          </div>
-          <div class="color-info">
-            <div class="color-name">Error</div>
-            <div class="color-value">Erro/Perda</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #00b4ff;">
-            #00b4ff
-          </div>
-          <div class="color-info">
-            <div class="color-name">Info</div>
-            <div class="color-value">Informação</div>
-          </div>
-        </div>
-      </div>
-      
-      <h3 style="margin: 30px 0 15px; color: #00d4ff; font-size: 1.1rem;">Criptomoedas</h3>
-      <div class="color-grid">
-        <div class="color-box">
-          <div class="color-sample" style="background: #f7931a;">
-            #f7931a
-          </div>
-          <div class="color-info">
-            <div class="color-name">Bitcoin</div>
-            <div class="color-value">Laranja crypto</div>
-          </div>
-        </div>
-        
-        <div class="color-box">
-          <div class="color-sample" style="background: #627eea;">
-            #627eea
-          </div>
-          <div class="color-info">
-            <div class="color-name">Ethereum</div>
-            <div class="color-value">Roxo/Violeta</div>
-          </div>
-        </div>
-      </div>
     </div>
-    
-    <!-- Gradientes -->
-    <div class="section">
-      <h2>🌈 Gradientes</h2>
-      <div class="gradient-box gradient-primary">
-        Gradient Primary (135deg, #0099ff 0%, #00d4ff 100%)
-      </div>
-      <div class="gradient-box gradient-success">
-        Gradient Success (135deg, #00d084 0%, #00ffb3 100%)
-      </div>
-      <div class="gradient-box gradient-warning">
-        Gradient Warning (135deg, #ffb74d 0%, #ffa500 100%)
-      </div>
-      <div class="gradient-box gradient-error">
-        Gradient Error (135deg, #ff6b6b 0%, #ff5252 100%)
-      </div>
-      <div class="gradient-box gradient-crypto">
-        Gradient Crypto (135deg, #0099ff 0%, #00d4ff 50%, #00ffb3 100%)
-      </div>
-    </div>
-  </div>
 </body>
+
 </html>

@@ -13,41 +13,153 @@
 - [x] Commits iniciais registrados
 - [x] Branch `main` criada
 
-### Frontend Angular
-- [x] Projeto Angular 17 inicializado
-- [x] `package.json` com dependências
-- [x] Configurações TypeScript e Angular
-- [x] `index.html` com meta tags
-- [x] `main.ts` com bootstrap
+## ✅ Fase 2: Backend API PHP (COMPLETO)
 
-### Design System
-- [x] **Paleta de Cores Completa**
-  - Tema escuro (padrão - crypto themed)
-  - Tema claro
-  - Cores primárias, secundárias e status
-  - Gradientes para crypto (Bitcoin, Ethereum)
-  
-- [x] **Estilos Globais (styles.scss)**
-  - 1800+ linhas de SCSS profissional
-  - Componentes base (botões, cards, inputs)
-  - Utilidades e helpers
-  - Animações suaves
-  - Responsividade completa
-  - Sistema de variáveis CSS
+### Arquitetura Backend
+- [x] Estrutura MVC profissional
+- [x] PSR-4 Autoloader
+- [x] Sistema de roteamento customizado
+- [x] Configuração ambiente (.env)
+- [x] Bootstrap e inicialização
 
-### Componentes Compartilhados
-- [x] **LayoutComponent** - Layout principal com navbar, sidebar, footer
-- [x] **NavbarComponent** - Barra de navegação com busca
-- [x] **SidebarComponent** - Menu lateral responsivo
-- [x] **FooterComponent** - Rodapé com links sociais
-- [x] **ThemeSwitchComponent** - Alternância tema claro/escuro
-- [x] **LanguageSwitchComponent** - Seletor de idioma
+### Camadas de Aplicação
+- [x] **Controllers** - AuthController, CryptoController, FavoriteController, PortfolioController, HistoryController, ExportController, HealthController
+- [x] **Models** - User, Cryptocurrency, Favorite, Portfolio, History
+- [x] **Services** - CryptoAPIService (integração com CoinGecko)
+- [x] **Middleware** - AuthMiddleware (JWT validation)
+- [x] **Utils** - JWT (token generation/validation), Logger
 
-### Serviços Core
-- [x] **ThemeService** - Gerenciamento de tema
-- [x] **AuthService** - Autenticação JWT
-- [x] **CryptoService** - Integração com API de criptos
-- [x] **FavoriteService** - Gerenciamento de favoritos
+### Banco de Dados
+- [x] **Migrations SQL** - 5 tabelas completas
+  - users (autenticação)
+  - cryptocurrencies (dados de criptos)
+  - favorites (criptos favoritas)
+  - portfolio (portfólio do usuário)
+  - history (histórico de ações)
+- [x] CLI setup.php - para migrations e seeds
+- [x] Database connection singleton
+
+### API Endpoints (Implementados)
+- [x] POST `/auth/register` - Registrar usuário
+- [x] POST `/auth/login` - Fazer login
+- [x] POST `/auth/refresh` - Renovar token
+- [x] GET `/auth/me` - Dados do usuário
+- [x] GET `/cryptocurrencies` - Listar criptos (paginada)
+- [x] GET `/cryptocurrencies/{id}` - Detalhes cripto
+- [x] GET `/cryptocurrencies/search/{query}` - Buscar criptos
+- [x] GET `/favorites` - Listar favoritos
+- [x] POST `/favorites` - Adicionar favorito
+- [x] DELETE `/favorites/{id}` - Remover favorito
+- [x] GET `/portfolio` - Listar portfólio
+- [x] POST `/portfolio` - Adicionar item
+- [x] PUT `/portfolio/{id}` - Atualizar item
+- [x] DELETE `/portfolio/{id}` - Remover item
+- [x] GET `/history` - Listar histórico
+- [x] POST `/history` - Adicionar entrada
+- [x] GET `/export/csv` - Exportar CSV
+- [x] GET `/export/pdf` - Exportar PDF (base)
+- [x] GET `/health` - Health check
+
+### Segurança
+- [x] Autenticação JWT com expiração
+- [x] CORS configurável por origem
+- [x] BCRYPT para hash de senhas
+- [x] Validação de entrada em todos endpoints
+- [x] Prepared statements contra SQL injection
+- [x] Proteção de dados sensíveis
+
+### Documentação Backend
+- [x] `backend/README.md` - Guia completo do backend
+- [x] `SETUP.md` - Guia de setup do projeto
+- [x] `.env.example` - Template variáveis
+- [x] Comentários JSDoc em todas as classes
+
+## ⏳ Fase 3: Frontend Angular (PENDENTE)
+
+### Estrutura Frontend
+- [ ] Projeto Angular 17 com TypeScript
+- [ ] Sistema modular com lazy loading
+- [ ] Componentes compartilhados
+- [ ] Serviços core (Auth, Crypto, etc)
+- [ ] Guards e interceptors
+- [ ] i18n (PT/EN)
+
+### Componentes
+- [ ] Layout principal
+- [ ] Navbar e Sidebar
+- [ ] Dashboard com charts
+- [ ] Login/Register
+- [ ] Lista de criptos
+- [ ] Meu Portfólio
+- [ ] Favoritos
+- [ ] Histórico
+- [ ] Exportação (CSV/PDF)
+
+### Integração
+- [ ] Conectar com API do backend
+- [ ] Autenticação via JWT
+- [ ] Integração de dados
+- [ ] Tratamento de erros
+
+### Design
+- [ ] Tema crypto-themed
+- [ ] Responsividade completa
+- [ ] Dark/Light mode
+- [ ] Animações suaves
+- [ ] Acessibilidade (WCAG)
+
+## ⏳ Fase 4: Testes e Deployment (PENDENTE)
+
+- [ ] Testes unitários backend (PHPUnit)
+- [ ] Testes E2E frontend (Cypress)
+- [ ] Docker setup
+- [ ] CI/CD pipeline
+- [ ] Deploy documentação
+- [ ] Performance optimization
+- [ ] Security audit
+
+## 📋 Próximas Ações
+
+1. **Imediato**: Configurar MySQL e rodar migrations
+2. **Próximo**: Inicializar frontend Angular
+3. **Depois**: Integrar frontend com backend
+4. **Final**: Testes e otimizações
+
+## 🛠️ Stack Utilizado
+
+### Backend
+- PHP 8.0+
+- MySQL/MariaDB
+- JWT para autenticação
+- CoinGecko API para dados de criptos
+
+### Frontend (Próximo)
+- Angular 17
+- TypeScript 5.2
+- SCSS
+- ng2-charts
+- jsPDF
+- PapaParse
+- @ngx-translate
+
+## 📊 Estatísticas
+
+- **Arquivos PHP criados**: 15+
+- **Migrations SQL**: 5
+- **Controllers**: 7
+- **Models**: 5
+- **Endpoints API**: 18+
+- **Linhas de código**: 2000+
+
+## 🎯 Objetivo Final
+
+Criar um sistema web completo para monitoramento de criptomoedas com:
+- ✅ Backend API robusto (FEITO)
+- ⏳ Frontend responsivo (PRÓXIMO)
+- ⏳ Autenticação segura (FEITO no backend, falta integração)
+- ⏳ Integração com dados reais de criptos
+- ⏳ Funcionalidades de portfólio completas
+- ⏳ Exportação de relatórios
 
 ### Sistema de Tradução (i18n)
 - [x] NgxTranslate configurado

@@ -1,0 +1,119 @@
+<?php
+
+/**
+ * Router - Routes HTTP requests to appropriate controllers
+ */
+
+namespace App\Routing;
+
+class Router
+{
+    private $routes = [];
+
+    public function __construct()
+    {
+        $this->registerRoutes();
+    }
+
+    private function registerRoutes()
+    {
+        // Auth routes
+        $this->routes['POST']['/auth/register'] = ['controller' => 'AuthController', 'method' => 'register'];
+        $this->routes['POST']['/auth/login'] = ['controller' => 'AuthController', 'method' => 'login'];
+        $this->routes['POST']['/auth/refresh'] = ['controller' => 'AuthController', 'method' => 'refresh'];
+        $this->routes['POST']['/auth/logout'] = ['controller' => 'AuthController', 'method' => 'logout'];
+        $this->routes['GET']['/auth/me'] = ['controller' => 'AuthController', 'method' => 'me'];
+
+        // Cryptocurrency routes
+        $this->routes['GET']['/cryptocurrencies'] = ['controller' => 'CryptoController', 'method' => 'list'];
+        $this->routes['GET']['/cryptocurrencies/(\d+)'] = ['controller' => 'CryptoController', 'method' => 'detail'];
+        $this->routes['GET']['/cryptocurrencies/search/(.+)'] = ['controller' => 'CryptoController', 'method' => 'search'];
+
+        // Favorites routes
+        $this->routes['GET']['/favorites'] = ['controller' => 'FavoriteController', 'method' => 'list'];
+        $this->routes['POST']['/favorites'] = ['controller' => 'FavoriteController', 'method' => 'create'];
+        $this->routes['DELETE']['/favorites/(\d+)'] = ['controller' => 'FavoriteController', 'method' => 'delete'];
+
+        // Portfolio routes
+        $this->routes['GET']['/portfolio'] = ['controller' => 'PortfolioController', 'method' => 'list'];
+        $this->routes['POST']['/portfolio'] = ['controller' => 'PortfolioController', 'method' => 'create'];
+        $this->routes['PUT']['/portfolio/(\d+)'] = ['controller' => 'PortfolioController', 'method' => 'update'];
+        $this->routes['DELETE']['/portfolio/(\d+)'] = ['controller' => 'PortfolioController', 'method' => 'delete'];
+
+        // History routes
+        $this->routes['GET']['/history'] = ['controller' => 'HistoryController', 'method' => 'list'];
+        $this->routes['POST']['/history'] = ['controller' => 'HistoryController', 'method' => 'create'];
+
+        // Export routes
+        $this->routes['GET']['/export/csv'] = ['controller' => 'ExportController', 'method' => 'csv'];
+        $this->routes['GET']['/export/pdf'] = ['controller' => 'ExportController', 'method' => 'pdf'];
+
+        // Health check
+        $this->routes['GET']['/health'] = ['controller' => 'HealthController', 'method' => 'check'];
+    }
+
+    public function route($method, $path)
+    {
+        // Normalize path
+        $path = '/' . trim($path, '/');
+
+        if (!isset($this->routes[$method])) {
+            $this->notFound("Route not found: $method $path");
+            return;
+        }
+
+        foreach ($this->routes[$method] as $pattern => $route) {
+            if ($this->matchRoute($pattern, $path, $params)) {
+                return $this->dispatch($route['controller'], $route['method'], $params);
+            }
+        }
+
+        $this->notFound("Route not found: $method $path");
+    }
+
+    private function matchRoute($pattern, $path, &$params = [])
+    {
+        $pattern = str_replace('\d', '[0-9]', $pattern);
+        $pattern = preg_replace_callback('/\(([^)]+)\)/', function ($m) {
+            return '(' . $m[1] . ')';
+        }, $pattern);
+
+        $regex = '#^' . $pattern . '$#';
+
+        if (preg_match($regex, $path, $matches)) {
+            array_shift($matches);
+            $params = $matches;
+            return true;
+        }
+
+        return false;
+    }
+
+    private function dispatch($controllerName, $method, $params = [])
+    {
+        $class = "App\\Controllers\\$controllerName";
+
+        if (!class_exists($class)) {
+            $this->notFound("Controller not found: $class");
+            return;
+        }
+
+        $controller = new $class();
+
+        if (!method_exists($controller, $method)) {
+            $this->notFound("Method not found: $class::$method");
+            return;
+        }
+
+        call_user_func_array([$controller, $method], $params);
+    }
+
+    private function notFound($message)
+    {
+        http_response_code(404);
+        echo json_encode([
+            'success' => false,
+            'message' => $message
+        ]);
+    }
+}
