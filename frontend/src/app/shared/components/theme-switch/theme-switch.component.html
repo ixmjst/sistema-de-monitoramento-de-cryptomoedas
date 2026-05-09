@@ -1,4 +1,20 @@
-<button class="theme-switch" (click)="toggleTheme()" [title]="(currentTheme$ | async) === 'dark' ? 'Claro' : 'Escuro'">
-    <span class="theme-icon" *ngIf="(currentTheme$ | async) === 'dark'">☀️</span>
-    <span class="theme-icon" *ngIf="(currentTheme$ | async) === 'light'">🌙</span>
+<button class="theme-switch" (click)="toggleTheme()" [title]="(currentTheme$ | async) === 'dark' ? 'Mudar para claro' : 'Mudar para escuro'">
+    <span class="theme-icon" *ngIf="(currentTheme$ | async) === 'dark'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.8" />
+            <path d="M12 1.5V3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M12 20.5V22.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M4.5 4.5L5.9 5.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M18.1 18.1L19.5 19.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M1.5 12H3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M20.5 12H22.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M4.5 19.5L5.9 18.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M18.1 5.9L19.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+    </span>
+    <span class="theme-icon" *ngIf="(currentTheme$ | async) === 'light'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12.79A9 9 0 0 1 11.21 3a7 7 0 1 0 9.79 9.79Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </span>
 </button>

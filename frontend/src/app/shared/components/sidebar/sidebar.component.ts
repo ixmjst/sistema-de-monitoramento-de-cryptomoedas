@@ -11,11 +11,11 @@ export class SidebarComponent {
     @Output() onClose = new EventEmitter<void>();
 
     menuItems = [
-        { label: 'Dashboard', icon: '📊', route: '/dashboard' },
-        { label: 'Criptomoedas', icon: '🪙', route: '/cryptocurrencies' },
-        { label: 'Favoritos', icon: '⭐', route: '/favorites' },
-        { label: 'Histórico', icon: '📈', route: '/history' },
-        { label: 'Exportar', icon: '📥', route: '/export' },
+        { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
+        { label: 'Criptomoedas', icon: 'crypto', route: '/cryptocurrencies' },
+        { label: 'Favoritos', icon: 'favorites', route: '/favorites' },
+        { label: 'Histórico', icon: 'history', route: '/history' },
+        { label: 'Exportar', icon: 'export', route: '/export' },
     ];
 
     constructor(private router: Router) { }

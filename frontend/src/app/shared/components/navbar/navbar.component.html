@@ -6,8 +6,13 @@
                 <span></span>
                 <span></span>
             </button>
-            <a class="navbar-logo" href="/">
-                <span class="logo-icon">💰</span>
+            <a class="navbar-logo" routerLink="/">
+                <span class="logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 12L10 6L14 10L20 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M4 20L10 14L14 18L20 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </span>
                 <span class="logo-text">CryptoMonitor</span>
             </a>
         </div>
@@ -28,7 +33,12 @@
             <app-language-switch></app-language-switch>
 
             <div class="navbar-user" *ngIf="user$ | async as user">
-                <img [src]="'https://i.pravatar.cc/40?u=' + user.email" [alt]="user.name" class="user-avatar" />
+                <span class="user-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12.5c2.485 0 4.5-2.015 4.5-4.5S14.485 3.5 12 3.5 7.5 5.515 7.5 8 9.515 12.5 12 12.5Z" stroke="currentColor" stroke-width="1.8" />
+                        <path d="M4.5 20.5c0-3.315 2.685-6 6-6s6 2.685 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    </svg>
+                </span>
                 <span class="user-name">{{ user.name }}</span>
             </div>
 

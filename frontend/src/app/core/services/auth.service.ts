@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 export interface User {
     id?: number;
     email: string;
     name: string;
     token?: string;
+}
+
+interface ApiResponse<T> {
+    success: boolean;
+    message: string;
+    data: T;
 }
 
 @Injectable({
@@ -30,17 +36,19 @@ export class AuthService {
     }
 
     login(email: string, password: string): Observable<{ token: string; user: User }> {
-        return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/login`, {
+        return this.http.post<ApiResponse<{ token: string; user: User }>>(`${this.apiUrl}/login`, {
             email,
             password,
         }).pipe(
-            tap(response => this.setSession(response))
+            map(response => response.data),
+            tap(data => this.setSession(data))
         );
     }
 
     register(user: { name: string; email: string; password: string }): Observable<{ token: string; user: User }> {
-        return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/register`, user).pipe(
-            tap(response => this.setSession(response))
+        return this.http.post<ApiResponse<{ token: string; user: User }>>(`${this.apiUrl}/register`, user).pipe(
+            map(response => response.data),
+            tap(data => this.setSession(data))
         );
     }
 

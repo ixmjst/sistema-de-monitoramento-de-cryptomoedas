@@ -1,11 +1,16 @@
 <div class="crypto-container">
   <div class="page-header">
     <div>
-      <h1>🪙 {{ 'nav.cryptocurrencies' | translate }}</h1>
+      <h1>{{ 'nav.cryptocurrencies' | translate }}</h1>
       <p class="text-muted">Track and monitor all cryptocurrencies</p>
     </div>
     <div class="search-box">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.8" />
+          <path d="M15.5 15.5l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </span>
       <input
         type="text"
         [formControl]="searchControl"
@@ -66,7 +71,9 @@
                 (click)="toggleFavorite(crypto)"
                 [title]="isFavorite(crypto.id) ? 'Remove from favorites' : 'Add to favorites'"
               >
-                {{ isFavorite(crypto.id) ? '⭐' : '☆' }}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" stroke="currentColor" stroke-width="1.8" fill="none" />
+                </svg>
               </button>
             </td>
           </tr>

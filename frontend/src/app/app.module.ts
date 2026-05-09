@@ -14,6 +14,7 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ThemeSwitchComponent } from './shared/components/theme-switch/theme-switch.component';
 import { LanguageSwitchComponent } from './shared/components/language-switch/language-switch.component';
+import { OverviewComponent } from './features/overview/overview.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -29,6 +30,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         FooterComponent,
         ThemeSwitchComponent,
         LanguageSwitchComponent,
+        OverviewComponent,
     ],
     imports: [
         BrowserModule,

@@ -2,8 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { AuthGuard } from './guards/auth.guard';
+import { OverviewComponent } from './features/overview/overview.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: OverviewComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
+  },
   {
     path: '',
     component: LayoutComponent,
@@ -39,12 +50,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
-  {
-    path: 'auth',
-    loadChildren: () =>
-      import('./features/auth/auth.module').then((m) => m.AuthModule),
-  },
-  { path: '**', redirectTo: '/dashboard' },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

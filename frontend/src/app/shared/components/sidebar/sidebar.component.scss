@@ -84,9 +84,16 @@
                         }
 
                         .nav-icon {
-                            font-size: 1.2rem;
-                            width: 24px;
-                            text-align: center;
+                            width: 30px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: var(--color-primary-light);
+                        }
+
+                        .nav-icon svg {
+                            width: 20px;
+                            height: 20px;
                         }
 
                         .nav-label {

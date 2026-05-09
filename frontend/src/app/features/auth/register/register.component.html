@@ -1,8 +1,19 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <h1>{{ 'auth.register' | translate }}</h1>
-      <p class="text-muted">Create your account to start monitoring</p>
+      <div class="auth-brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 12L9 7L14 12L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M4 19L9 14L14 19L19 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <span class="brand-label">CryptoMonitor</span>
+          <h1>{{ 'auth.register' | translate }}</h1>
+        </div>
+      </div>
+      <p class="auth-description">Registre-se para acessar o painel completo com favoritos, histórico e exportações profissionais.</p>
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">

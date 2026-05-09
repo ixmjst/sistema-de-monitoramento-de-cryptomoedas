@@ -3,36 +3,78 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0A1428 0%, #1a2332 100%);
+  background: radial-gradient(circle at top, rgba(0, 212, 255, 0.16), transparent 40%), linear-gradient(135deg, #071125 0%, #111f36 100%);
   padding: var(--spacing-lg);
 }
 
 .auth-card {
-  background: var(--color-bg-secondary);
-  border-radius: var(--radius-xl);
+  background: rgba(15, 26, 45, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-2xl, 1.25rem);
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-xl);
   width: 100%;
-  max-width: 450px;
+  max-width: 520px;
   animation: slideInUp 0.4s ease-out;
 }
 
 .auth-header {
-  text-align: center;
   margin-bottom: var(--spacing-xl);
+}
 
-  h1 {
-    background: var(--gradient-crypto);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: var(--spacing-sm);
-  }
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
 
-  p {
-    color: var(--color-text-tertiary);
-    font-size: 0.9rem;
-  }
+.brand-mark {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.18), rgba(0, 255, 179, 0.14));
+  color: white;
+}
+
+.brand-mark svg {
+  width: 32px;
+  height: 32px;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brand-label {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-primary-light);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.auth-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1.05;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.auth-description {
+  color: var(--color-text-tertiary);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 34rem;
 }
 
 .auth-form {
@@ -43,23 +85,23 @@
       display: block;
       margin-bottom: var(--spacing-sm);
       color: var(--color-text-secondary);
-      font-weight: 500;
-      font-size: 0.9rem;
+      font-weight: 600;
+      font-size: 0.95rem;
     }
 
     input {
       width: 100%;
       padding: var(--spacing-md);
-      background: var(--color-bg-tertiary);
-      border: 2px solid transparent;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-md);
       color: var(--color-text-primary);
       font-size: 1rem;
-      transition: all var(--transition-fast);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 
       &:focus {
-        border-color: var(--color-primary-light);
-        box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1);
+        border-color: rgba(0, 212, 255, 0.4);
+        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
       }
 
       &.error {
@@ -81,12 +123,12 @@
 
   .error-alert {
     background: rgba(255, 107, 107, 0.1);
-    border: 1px solid var(--color-error);
+    border: 1px solid rgba(255, 107, 107, 0.22);
     color: var(--color-error);
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-lg);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   button[type="submit"] {
@@ -99,7 +141,7 @@
   text-align: center;
   margin-top: var(--spacing-xl);
   padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--color-bg-tertiary);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 
   p {
     color: var(--color-text-secondary);
@@ -108,17 +150,23 @@
 
   a {
     color: var(--color-primary-light);
-    font-weight: 600;
+    font-weight: 700;
     margin-left: var(--spacing-xs);
 
     &:hover {
-      text-decoration: underline;
+      color: var(--color-primary);
+      text-decoration: none;
     }
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 580px) {
   .auth-card {
     padding: var(--spacing-xl);
+  }
+
+  .auth-brand {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
