@@ -11,6 +11,8 @@ yarn-error.log*
 /.tmp/
 .sass-cache/
 /coverage/
+/frontend/.angular/
+**/.angular/
 
 # PHP
 /vendor/
