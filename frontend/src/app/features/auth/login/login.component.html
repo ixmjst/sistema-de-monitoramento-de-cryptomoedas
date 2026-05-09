@@ -4,8 +4,10 @@
       <div class="auth-brand">
         <div class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 12L9 7L14 12L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M4 19L9 14L14 19L19 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M4 12L9 7L14 12L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M4 19L9 14L14 19L19 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </div>
         <div class="brand-copy">
@@ -13,19 +15,15 @@
           <h1>{{ 'auth.login' | translate }}</h1>
         </div>
       </div>
-      <p class="auth-description">Acesse sua conta e gerencie suas criptomoedas com uma visão profissional e segura do mercado.</p>
+      <p class="auth-description">Acesse sua conta e gerencie suas criptomoedas com uma visão profissional e segura do
+        mercado.</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
       <div class="form-group">
         <label for="email">{{ 'auth.email' | translate }}</label>
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          [class.error]="email?.invalid && email?.touched"
-          placeholder="seu@email.com"
-        />
+        <input id="email" type="email" formControlName="email" [class.error]="email?.invalid && email?.touched"
+          placeholder="seu@email.com" />
         <span class="error-message" *ngIf="email?.invalid && email?.touched">
           <span *ngIf="email?.errors?.['required']">Email is required</span>
           <span *ngIf="email?.errors?.['email']">Invalid email format</span>
@@ -34,13 +32,8 @@
 
       <div class="form-group">
         <label for="password">{{ 'auth.password' | translate }}</label>
-        <input
-          id="password"
-          type="password"
-          formControlName="password"
-          [class.error]="password?.invalid && password?.touched"
-          placeholder="••••••••"
-        />
+        <input id="password" type="password" formControlName="password"
+          [class.error]="password?.invalid && password?.touched" placeholder="••••••••" />
         <span class="error-message" *ngIf="password?.invalid && password?.touched">
           <span *ngIf="password?.errors?.['required']">Password is required</span>
           <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>

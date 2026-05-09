@@ -13,25 +13,30 @@
                 <li *ngFor="let item of menuItems" class="nav-item">
                     <button class="nav-link" (click)="navigate(item.route)">
                         <span class="nav-icon" [ngSwitch]="item.icon">
-                            <svg *ngSwitchCase="'dashboard'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <svg *ngSwitchCase="'dashboard'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 20h16" />
                                 <path d="M8 16V10" />
                                 <path d="M12 16V6" />
                                 <path d="M16 16V13" />
                             </svg>
-                            <svg *ngSwitchCase="'crypto'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <svg *ngSwitchCase="'crypto'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="7" />
                                 <path d="M8 12h8" />
                                 <path d="M12 8v8" />
                             </svg>
-                            <svg *ngSwitchCase="'favorites'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <svg *ngSwitchCase="'favorites'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M6 4h12v16l-6-4-6 4V4Z" />
                             </svg>
-                            <svg *ngSwitchCase="'history'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <svg *ngSwitchCase="'history'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 12a8 8 0 1 1 8 8" />
                                 <path d="M12 4v8h8" />
                             </svg>
-                            <svg *ngSwitchCase="'export'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <svg *ngSwitchCase="'export'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 3v12" />
                                 <path d="M8 11l4 4 4-4" />
                                 <path d="M4 21h16" />

@@ -1,100 +1,101 @@
 ﻿<div class="overview-page">
-  <section class="hero">
-    <div class="hero-copy">
-      <span class="eyebrow">CryptoMonitor</span>
-      <h1>Mercado de criptomoedas em tempo real</h1>
-      <p>Explore preços, volume, tendência e indicadores de mercado antes de entrar na sua conta.</p>
-      <div class="hero-actions">
-        <a routerLink="/auth/login" class="btn btn-primary">Fazer login</a>
-        <a routerLink="/auth/register" class="btn btn-secondary">Criar conta</a>
-      </div>
-    </div>
-  </section>
-  <section class="metrics-section">
-    <div class="metric-card">
-      <span>Total Market Cap</span>
-      <strong>{{ formatMarketCap(totalMarketCap) }}</strong>
-    </div>
-    <div class="metric-card">
-      <span>Volume 24h</span>
-      <strong>{{ formatMarketCap(totalVolume24h) }}</strong>
-    </div>
-    <div class="metric-card">
-      <span>Top ganhos</span>
-      <strong>{{ topGainers.length }}</strong>
-    </div>
-    <div class="metric-card">
-      <span>Top perdas</span>
-      <strong>{{ topLosers.length }}</strong>
-    </div>
-  </section>
-  <section class="insights-section">
-    <div class="insights-intro">
-      <h2>Visão geral completa</h2>
-      <p>Busque, filtre e compare criptomoedas com informações de preço, volume e valor de mercado.</p>
-    </div>
-    <div class="insights-grid">
-      <div class="insight-card">
-        <h3>Monitoramento avançado</h3>
-        <p>Acesse dados de múltiplas moedas e acompanhe tendência de mercado.</p>
-      </div>
-      <div class="insight-card">
-        <h3>Pesquisa inteligente</h3>
-        <p>Encontre qualquer cripto rapidamente por nome ou símbolo.</p>
-      </div>
-      <div class="insight-card">
-        <h3>Interface profissional</h3>
-        <p>Design moderno com foco em leitura e usabilidade.</p>
-      </div>
-    </div>
-  </section>
-  <section class="market-table-section">
-    <div class="market-table-header">
-      <div>
-        <h2>Principais criptomoedas</h2>
-        <p>Dados do mercado atual disponíveis sem login. Acesse o sistema completo após autenticar.</p>
-      </div>
-      <div class="search-box">
-        <input type="text" [formControl]="searchControl" placeholder="Buscar criptomoedas..." />
-      </div>
-    </div>
-    <div class="table-card" *ngIf="!loading">
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Moeda</th>
-              <th>Preço</th>
-              <th>Variação 24h</th>
-              <th>Market Cap</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let crypto of filteredCryptos; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>
-                <div class="crypto-cell">
-                  <img [src]="crypto.imageUrl" [alt]="crypto.name" *ngIf="crypto.imageUrl" />
-                  <div class="crypto-text">
-                    <strong>{{ crypto.name }}</strong>
-                    <span>{{ crypto.symbol.toUpperCase() }}</span>
-                  </div>
-                </div>
-              </td>
-              <td>{{ formatPrice(crypto.currentPrice) }}</td>
-              <td [class.positive]="crypto.priceChange24h >= 0" [class.negative]="crypto.priceChange24h < 0">
-                {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
-              </td>
-              <td>{{ formatMarketCap(crypto.marketCap || 0) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="loading-container" *ngIf="loading">
-      <div class="spinner"></div>
-      <p>Carregando criptomoedas...</p>
-    </div>
-  </section>
+    <section class="hero">
+        <div class="hero-copy">
+            <span class="eyebrow">CryptoMonitor</span>
+            <h1>Mercado de criptomoedas em tempo real</h1>
+            <p>Explore preços, volume, tendência e indicadores de mercado antes de entrar na sua conta.</p>
+            <div class="hero-actions">
+                <a routerLink="/auth/login" class="btn btn-primary">Fazer login</a>
+                <a routerLink="/auth/register" class="btn btn-secondary">Criar conta</a>
+            </div>
+        </div>
+    </section>
+    <section class="metrics-section">
+        <div class="metric-card">
+            <span>Total Market Cap</span>
+            <strong>{{ formatMarketCap(totalMarketCap) }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Volume 24h</span>
+            <strong>{{ formatMarketCap(totalVolume24h) }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Top ganhos</span>
+            <strong>{{ topGainers.length }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Top perdas</span>
+            <strong>{{ topLosers.length }}</strong>
+        </div>
+    </section>
+    <section class="insights-section">
+        <div class="insights-intro">
+            <h2>Visão geral completa</h2>
+            <p>Busque, filtre e compare criptomoedas com informações de preço, volume e valor de mercado.</p>
+        </div>
+        <div class="insights-grid">
+            <div class="insight-card">
+                <h3>Monitoramento avançado</h3>
+                <p>Acesse dados de múltiplas moedas e acompanhe tendência de mercado.</p>
+            </div>
+            <div class="insight-card">
+                <h3>Pesquisa inteligente</h3>
+                <p>Encontre qualquer cripto rapidamente por nome ou símbolo.</p>
+            </div>
+            <div class="insight-card">
+                <h3>Interface profissional</h3>
+                <p>Design moderno com foco em leitura e usabilidade.</p>
+            </div>
+        </div>
+    </section>
+    <section class="market-table-section">
+        <div class="market-table-header">
+            <div>
+                <h2>Principais criptomoedas</h2>
+                <p>Dados do mercado atual disponíveis sem login. Acesse o sistema completo após autenticar.</p>
+            </div>
+            <div class="search-box">
+                <input type="text" [formControl]="searchControl" placeholder="Buscar criptomoedas..." />
+            </div>
+        </div>
+        <div class="table-card" *ngIf="!loading">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Moeda</th>
+                            <th>Preço</th>
+                            <th>Variação 24h</th>
+                            <th>Market Cap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let crypto of filteredCryptos; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>
+                                <div class="crypto-cell">
+                                    <img [src]="crypto.imageUrl" [alt]="crypto.name" *ngIf="crypto.imageUrl" />
+                                    <div class="crypto-text">
+                                        <strong>{{ crypto.name }}</strong>
+                                        <span>{{ crypto.symbol.toUpperCase() }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ formatPrice(crypto.currentPrice) }}</td>
+                            <td [class.positive]="crypto.priceChange24h >= 0"
+                                [class.negative]="crypto.priceChange24h < 0">
+                                {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
+                            </td>
+                            <td>{{ formatMarketCap(crypto.marketCap || 0) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="loading-container" *ngIf="loading">
+            <div class="spinner"></div>
+            <p>Carregando criptomoedas...</p>
+        </div>
+    </section>
 </div>
