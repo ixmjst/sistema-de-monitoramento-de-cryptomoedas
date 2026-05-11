@@ -9,8 +9,11 @@
  *   - reset: Drop all tables and run migrations again
  */
 
-require_once dirname(__DIR__) . '/src/Config/autoload.php';
-require_once dirname(__DIR__) . '/src/Config/bootstrap.php';
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/src');
+
+require_once APP_PATH . '/Config/autoload.php';
+require_once APP_PATH . '/Config/bootstrap.php';
 
 use App\Config\Database;
 
@@ -78,11 +81,21 @@ class DatabaseSetup
                 }
             );
 
+            $hasError = false;
             foreach ($statements as $statement) {
-                $this->db->exec($statement . ';');
+                try {
+                    $this->db->exec($statement . ';');
+                } catch (\Exception $e) {
+                    echo "    [!] Warning: " . $e->getMessage() . " (continuing)\n";
+                    $hasError = true;
+                }
             }
 
-            echo "    [✓] $filename completed\n";
+            if ($hasError) {
+                echo "    [~] $filename completed (with warnings)\n";
+            } else {
+                echo "    [✓] $filename completed\n";
+            }
         } catch (\Exception $e) {
             echo "    [✗] Error: " . $e->getMessage() . "\n";
             throw $e;

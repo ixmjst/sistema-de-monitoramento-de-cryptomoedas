@@ -9,9 +9,9 @@ export class FooterComponent {
     currentYear = new Date().getFullYear();
 
     footerLinks = [
-        { label: 'Sobre', url: '#' },
-        { label: 'Privacidade', url: '#' },
-        { label: 'Termos', url: '#' },
-        { label: 'Contato', url: '#' },
+        { labelKey: 'footer.about', url: '#' },
+        { labelKey: 'footer.privacy', url: '#' },
+        { labelKey: 'footer.terms', url: '#' },
+        { labelKey: 'footer.contact', url: '#' },
     ];
 }

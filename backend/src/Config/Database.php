@@ -30,13 +30,26 @@ class Database
     private function connect()
     {
         try {
+            $driver = getenv('DB_DRIVER') ?: 'mysql';
             $host = getenv('DB_HOST') ?: 'localhost';
             $port = getenv('DB_PORT') ?: 3306;
             $dbname = getenv('DB_NAME');
             $user = getenv('DB_USER') ?: 'root';
             $password = getenv('DB_PASSWORD') ?: '';
 
-            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+            if (!$dbname) {
+                throw new \Exception('Database connection failed: DB_NAME is not defined.');
+            }
+
+            if (!extension_loaded('pdo')) {
+                throw new \Exception('Database connection failed: PHP PDO extension is not loaded.');
+            }
+
+            if (!extension_loaded("pdo_$driver")) {
+                throw new \Exception('Database connection failed: PDO driver "' . $driver . '" is not loaded. Install/enable the corresponding PHP extension (for example, pdo_mysql).');
+            }
+
+            $dsn = "$driver:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
 
             $this->connection = new PDO(
                 $dsn,

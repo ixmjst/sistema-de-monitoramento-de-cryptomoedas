@@ -2,30 +2,24 @@
 
 /**
  * API Entry Point - CryptoMonitor Backend
- * 
- * This is the main entry point for all API requests.
- * All requests are routed through here.
  */
 
-// Enable error reporting in development
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Set JSON response header
-header('Content-Type: application/json; charset=utf-8');
-
-// Load environment variables
-$root = dirname(dirname(__FILE__));
+// Define base path before loading anything
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/src');
 
 // Load autoloader first
-require_once $root . '/src/Config/autoload.php';
+require_once APP_PATH . '/Config/autoload.php';
 
-// Load configuration
-$configPath = $root . '/src/Config/bootstrap.php';
-if (file_exists($configPath)) {
-    require_once $configPath;
-}
+// Load bootstrap (loads .env, sets CORS headers, handles OPTIONS preflight)
+require_once APP_PATH . '/Config/bootstrap.php';
+
+// Set JSON response header
+header('Content-Type: application/json; charset=utf-8');
 
 // Apply authentication middleware for protected routes
 \App\Middleware\AuthMiddleware::authenticate();
@@ -42,22 +36,19 @@ if (strpos($requestPath, $apiPrefix) === 0) {
     $path = $requestPath;
 }
 
-// Remove leading/trailing slashes
 $path = trim($path, '/');
 
 try {
-    // Route the request
     $router = new \App\Routing\Router();
     $router->route($method, $path);
 } catch (\Exception $e) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => getenv('APP_DEBUG') ? $e->getMessage() : 'Internal Server Error',
-        'error' => getenv('APP_DEBUG') ? [
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTrace()
+        'message' => getenv('APP_DEBUG') === 'true' ? $e->getMessage() : 'Internal Server Error',
+        'error'   => getenv('APP_DEBUG') === 'true' ? [
+            'file'  => $e->getFile(),
+            'line'  => $e->getLine(),
         ] : null
     ]);
 }

@@ -48,6 +48,12 @@ Editar `backend/.env` com:
 - Chave JWT secreta
 - Configurações de CORS
 
+> Observação para Windows: certifique-se de que a extensão PHP `pdo_mysql` esteja habilitada no seu `php.ini`. Sem ela, a aplicação não consegue conectar ao MySQL.
+> 
+> 1. Abra o `php.ini` usado pelo servidor PHP.
+> 2. Remova o `;` da linha `extension=pdo_mysql`.
+> 3. Reinicie o servidor PHP.
+
 ### 3. Executar Migrações
 
 ```bash

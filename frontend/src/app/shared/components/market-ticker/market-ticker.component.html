@@ -1,0 +1,44 @@
+<section class="market-ticker" aria-live="polite">
+  <div class="ticker-track" *ngIf="marketTicker; else loadingTicker">
+    <div class="ticker-content">
+      <span class="ticker-item">
+        {{ 'market.coins' | translate }}: <strong>{{ marketTicker.totalCoins | number }}</strong>
+      </span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">
+        {{ 'market.exchanges' | translate }}: <strong>{{ marketTicker.totalExchanges | number }}</strong>
+      </span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">
+        {{ 'market.marketCap' | translate }}:
+        <strong>{{ formatMarketCap(marketTicker.totalMarketCap) }}</strong>
+        <span [class]="marketTicker.marketCapChange24h >= 0 ? 'tick-up' : 'tick-down'">
+          {{ marketTicker.marketCapChange24h >= 0 ? '▲' : '▼' }}
+          {{ marketTicker.marketCapChange24h | number:'1.1-1' }}%
+        </span>
+      </span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">
+        {{ 'market.volume24h' | translate }}: <strong>{{ formatMarketCap(marketTicker.totalVolume24h) }}</strong>
+      </span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">
+        {{ 'market.dominance' | translate }}:
+        <strong>BTC {{ marketTicker.btcDominance | number:'1.1-1' }}%</strong>
+        <strong>ETH {{ marketTicker.ethDominance | number:'1.1-1' }}%</strong>
+      </span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">
+        {{ 'market.gas' | translate }}: <strong>{{ marketTicker.gasGwei }} GWEI</strong>
+      </span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item ticker-time" *ngIf="updatedAt">
+        {{ updatedAt | date:'HH:mm:ss' }}
+      </span>
+    </div>
+  </div>
+
+  <ng-template #loadingTicker>
+    <div class="ticker-loading">{{ 'common.loading' | translate }}</div>
+  </ng-template>
+</section>

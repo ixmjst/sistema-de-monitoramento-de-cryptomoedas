@@ -3,14 +3,14 @@
         <div class="footer-main">
             <div class="footer-brand">
                 <h4>CryptoMonitor</h4>
-                <p>Sistema profissional de monitoramento de criptomoedas em tempo real.</p>
+                <p>{{ 'footer.description' | translate }}</p>
             </div>
 
             <div class="footer-actions">
                 <div class="footer-links">
-                    <span>Links úteis:</span>
+                    <span>{{ 'footer.links' | translate }}</span>
                     <ng-container *ngFor="let link of footerLinks; let last = last">
-                        <a [href]="link.url">{{ link.label }}</a>
+                        <a [href]="link.url">{{ link.labelKey | translate }}</a>
                         <span *ngIf="!last" class="link-separator">•</span>
                     </ng-container>
                 </div>
@@ -25,8 +25,8 @@
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; {{ currentYear }} CryptoMonitor. Todos os direitos reservados.</p>
-            <p class="footer-credit">feito por ixmjst👾</p>
+            <p>&copy; {{ currentYear }} CryptoMonitor. {{ 'footer.copyright' | translate }}.</p>
+            <p class="footer-credit">{{ 'footer.developedBy' | translate }}</p>
         </div>
     </div>
 </footer>

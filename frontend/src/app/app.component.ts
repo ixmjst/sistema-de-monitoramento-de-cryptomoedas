@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationCancel, NavigationEnd, NavigationError, NavigationStart } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -9,14 +10,27 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent implements OnInit, OnDestroy {
     title = 'Sistema de Monitoramento de Criptomoedas';
+    routeLoading = false;
 
     constructor(
         private themeService: ThemeService,
-        private translateService: TranslateService
+        private translateService: TranslateService,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
         this.initializeApp();
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.routeLoading = true;
+            }
+
+            if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+                setTimeout(() => {
+                    this.routeLoading = false;
+                }, 180);
+            }
+        });
     }
 
     ngOnDestroy(): void {

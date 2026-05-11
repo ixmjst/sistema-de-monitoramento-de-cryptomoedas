@@ -1,0 +1,222 @@
+<div class="portfolio-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Meu Portfólio</h1>
+      <p class="text-muted">Acompanhe os seus investimentos em criptomoedas</p>
+    </div>
+    <button class="btn btn-primary btn-sm" (click)="toggleForm()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      {{ showForm ? 'Fechar formulário' : 'Adicionar criptomoeda' }}
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-grid" *ngIf="portfolioItems.length > 0">
+    <div class="summary-card summary-card--value">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 3"/>
+        </svg>
+      </div>
+      <div>
+        <p class="summary-label">Valor Atual</p>
+        <h3 class="summary-value">{{ formatPrice(totalValue) }}</h3>
+      </div>
+    </div>
+    <div class="summary-card summary-card--invested">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+      </div>
+      <div>
+        <p class="summary-label">Total Investido</p>
+        <h3 class="summary-value">{{ formatPrice(totalInvested) }}</h3>
+      </div>
+    </div>
+    <div class="summary-card" [class.summary-card--gain]="totalGain >= 0" [class.summary-card--loss]="totalGain < 0">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M3 17l5-5 4 4 9-9"/>
+        </svg>
+      </div>
+      <div>
+        <p class="summary-label">Lucro / Prejuízo</p>
+        <h3 class="summary-value" [class.positive]="totalGain >= 0" [class.negative]="totalGain < 0">
+          {{ formatPrice(totalGain) }}
+        </h3>
+        <span class="summary-pct" [class.positive]="totalGain >= 0" [class.negative]="totalGain < 0">
+          {{ totalGain >= 0 ? '+' : '' }}{{ totalGainPercent.toFixed(2) }}%
+        </span>
+      </div>
+    </div>
+    <div class="summary-card summary-card--count">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="12" cy="12" r="7"/><path d="M8 12h8"/><path d="M12 8v8"/>
+        </svg>
+      </div>
+      <div>
+        <p class="summary-label">Posições</p>
+        <h3 class="summary-value">{{ portfolioItems.length }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Form -->
+  <div class="form-panel" *ngIf="showForm">
+    <div class="form-panel-header">
+      <h2>{{ editingId ? 'Editar posição' : 'Nova posição' }}</h2>
+      <button class="btn-close" (click)="closeForm()" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="portfolioForm" (ngSubmit)="saveItem()" class="form-grid">
+      <div class="form-field form-field--full">
+        <label>Criptomoeda *</label>
+        <select formControlName="crypto_code">
+          <option value="" disabled>Selecione uma criptomoeda</option>
+          <option *ngFor="let crypto of filteredCryptos" [value]="crypto.id">
+            {{ crypto.name }} ({{ crypto.symbol?.toUpperCase() }})
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label>Quantidade *</label>
+        <input type="number" formControlName="quantity" placeholder="Ex: 0.5" step="0.00001" min="0"/>
+      </div>
+
+      <div class="form-field">
+        <label>Preço de Compra (USD) *</label>
+        <input type="number" formControlName="purchase_price" placeholder="Ex: 30000" step="0.01" min="0"/>
+      </div>
+
+      <div class="form-field">
+        <label>Data de Compra *</label>
+        <input type="date" formControlName="purchase_date"/>
+      </div>
+
+      <div class="form-field">
+        <label>Notas</label>
+        <input type="text" formControlName="notes" placeholder="Opcional"/>
+      </div>
+
+      <div class="form-actions">
+        <label *ngIf="!editingId" class="keep-open-checkbox" style="margin-right: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--color-text-secondary); cursor: pointer; user-select: none;">
+          <input type="checkbox" formControlName="keepOpen" style="width: auto; margin: 0; cursor: pointer;" />
+          Continuar adicionando
+        </label>
+        <button type="submit" class="btn btn-primary btn-sm">
+          {{ editingId ? 'Atualizar' : 'Adicionar' }}
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="closeForm()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Carregando portfólio...</p>
+  </div>
+
+  <!-- Portfolio Cards -->
+  <div class="positions-grid" *ngIf="!loading && portfolioItems.length > 0">
+    <div class="position-card" *ngFor="let item of portfolioItems; trackBy: trackById">
+
+      <!-- Card Header -->
+      <div class="position-header">
+        <div class="position-coin">
+          <div class="coin-avatar">
+            <img *ngIf="getCryptoImage(item.crypto_code)"
+              [src]="getCryptoImage(item.crypto_code)"
+              [alt]="item.name"
+              loading="lazy"
+              (error)="clearCryptoImage(item.crypto_code)" />
+            <span *ngIf="!getCryptoImage(item.crypto_code)">
+              {{ (item.symbol || item.name || '?').charAt(0).toUpperCase() }}
+            </span>
+          </div>
+          <div>
+            <h4>{{ item.name || item.crypto_code }}</h4>
+            <span class="coin-symbol">{{ (item.symbol || item.crypto_code).toUpperCase() }}</span>
+          </div>
+        </div>
+        <div class="position-actions">
+          <button class="action-btn" (click)="editItem(item)" title="Editar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z"/>
+            </svg>
+          </button>
+          <button class="action-btn action-btn--delete" (click)="deleteItem(item)" title="Remover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M8 7h8M10 11v6M14 11v6"/>
+              <path d="M5 7h14l-1.5 12.5a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9L5 7Z"/>
+              <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="position-metrics">
+        <div class="metric">
+          <span class="metric-label">Quantidade</span>
+          <span class="metric-value">{{ formatQuantity(item.quantity) }}</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Preço de compra</span>
+          <span class="metric-value">{{ formatPrice(item.purchase_price) }}</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Preço atual</span>
+          <span class="metric-value">{{ formatPrice(item.current_price || item.purchase_price) }}</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Valor atual</span>
+          <span class="metric-value metric-value--highlight">
+            {{ formatPrice(item.quantity * (item.current_price || item.purchase_price)) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Gain/Loss Bar -->
+      <div class="position-gain"
+        [class.positive]="(item.quantity * (item.current_price || item.purchase_price)) >= (item.quantity * item.purchase_price)"
+        [class.negative]="(item.quantity * (item.current_price || item.purchase_price)) < (item.quantity * item.purchase_price)">
+        <span class="gain-amount">
+          {{ formatPrice((item.quantity * (item.current_price || item.purchase_price)) - (item.quantity * item.purchase_price)) }}
+        </span>
+        <span class="gain-pct">
+          {{ (((item.current_price || item.purchase_price) / item.purchase_price - 1) * 100) >= 0 ? '+' : '' }}{{ (((item.current_price || item.purchase_price) / item.purchase_price - 1) * 100).toFixed(2) }}%
+        </span>
+      </div>
+
+      <div class="position-date" *ngIf="item.purchase_date">
+        Comprado em {{ item.purchase_date | date:'dd/MM/yyyy' }}
+      </div>
+      <div class="position-notes" *ngIf="item.notes">{{ item.notes }}</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading && portfolioItems.length === 0 && !showForm">
+    <div class="empty-icon">📊</div>
+    <h2>Portfólio vazio</h2>
+    <p>Adicione as suas posições para acompanhar o desempenho dos investimentos.</p>
+    <button class="btn btn-primary btn-sm" (click)="toggleForm()">Adicionar primeira criptomoeda</button>
+  </div>
+
+</div>

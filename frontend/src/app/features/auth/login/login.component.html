@@ -1,13 +1,19 @@
 <div class="auth-container">
   <div class="auth-card">
+    <button type="button" class="btn btn-secondary btn-sm back-button" (click)="goBack()">
+      {{ 'common.back' | translate }}
+    </button>
+
     <div class="auth-header">
       <div class="auth-brand">
         <div class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 12L9 7L14 12L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path d="M4 19L9 14L14 19L19 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
+            <path d="M12 2L3.5 7v10L12 22l8.5-5V7L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+            <path d="M7 15.5v-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M10.5 15.5V9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M14 15.5V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <circle cx="17.5" cy="7" r="1.5" fill="currentColor" />
+            <path d="M7 12c1.5-1.5 2.5-2.5 3.5-2.5s2.5-2.5 3.5-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2 2" />
           </svg>
         </div>
         <div class="brand-copy">
@@ -15,28 +21,27 @@
           <h1>{{ 'auth.login' | translate }}</h1>
         </div>
       </div>
-      <p class="auth-description">Acesse sua conta e gerencie suas criptomoedas com uma visão profissional e segura do
-        mercado.</p>
+      <p class="auth-description">{{ 'auth.loginDescription' | translate }}</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
       <div class="form-group">
         <label for="email">{{ 'auth.email' | translate }}</label>
         <input id="email" type="email" formControlName="email" [class.error]="email?.invalid && email?.touched"
-          placeholder="seu@email.com" />
+          [placeholder]="'auth.emailPlaceholder' | translate" />
         <span class="error-message" *ngIf="email?.invalid && email?.touched">
-          <span *ngIf="email?.errors?.['required']">Email is required</span>
-          <span *ngIf="email?.errors?.['email']">Invalid email format</span>
+          <span *ngIf="email?.errors?.['required']">{{ 'auth.emailRequired' | translate }}</span>
+          <span *ngIf="email?.errors?.['email']">{{ 'auth.emailInvalid' | translate }}</span>
         </span>
       </div>
 
       <div class="form-group">
         <label for="password">{{ 'auth.password' | translate }}</label>
         <input id="password" type="password" formControlName="password"
-          [class.error]="password?.invalid && password?.touched" placeholder="••••••••" />
+          [class.error]="password?.invalid && password?.touched" [placeholder]="'auth.passwordPlaceholder' | translate" />
         <span class="error-message" *ngIf="password?.invalid && password?.touched">
-          <span *ngIf="password?.errors?.['required']">Password is required</span>
-          <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+          <span *ngIf="password?.errors?.['required']">{{ 'auth.passwordRequired' | translate }}</span>
+          <span *ngIf="password?.errors?.['minlength']">{{ 'auth.passwordMin' | translate }}</span>
         </span>
       </div>
 
@@ -51,8 +56,11 @@
 
       <div class="auth-footer">
         <p>
-          Don't have an account?
+          {{ 'auth.noAccount' | translate }}
           <a routerLink="/auth/register">{{ 'auth.register' | translate }}</a>
+        </p>
+        <p>
+          <a routerLink="/auth/forgot-password">Esqueceu a senha?</a>
         </p>
       </div>
     </form>

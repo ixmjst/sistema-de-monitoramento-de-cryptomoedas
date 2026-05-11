@@ -5,6 +5,7 @@
         "logout": "Logout",
         "register": "Registrar",
         "search": "Buscar",
+        "searchPlaceholder": "Buscar criptomoedas...",
         "home": "Início",
         "profile": "Perfil",
         "settings": "Configurações",
@@ -68,6 +69,8 @@
         "privacy": "Privacidade",
         "terms": "Termos",
         "contact": "Contato",
+        "links": "Links úteis:",
+        "description": "Sistema profissional de monitoramento de criptomoedas em tempo real.",
         "copyright": "Todos os direitos reservados",
         "developedBy": "Desenvolvido com ❤️ by DevTeam"
     }

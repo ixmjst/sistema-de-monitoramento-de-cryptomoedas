@@ -19,6 +19,7 @@ export interface Cryptocurrency {
     marketCapRank?: number;
     market_cap_rank?: number;
     volume24h?: number;
+    sparkline?: number[];
 }
 
 interface ApiResponse<T> {
@@ -65,7 +66,7 @@ export class CryptoService {
             order: 'market_cap_desc',
             per_page: limit.toString(),
             page: page.toString(),
-            sparkline: 'false',
+            sparkline: 'true',
             locale: 'en',
             x_cg_demo_api_key: this.coingeckoKey
         };
@@ -155,6 +156,7 @@ export class CryptoService {
             marketCap: parseFloat(c.market_cap ?? c.marketCap ?? 0),
             marketCapRank: parseInt(c.market_cap_rank ?? c.marketCapRank ?? 0),
             volume24h: parseFloat(c.total_volume ?? c.volume_24h ?? c.volume24h ?? 0),
+            sparkline: c.sparkline_in_7d?.price ?? c.sparkline ?? [],
         };
     }
 
