@@ -8,19 +8,23 @@ import { AuthService } from '../../../core/services/auth.service';
     styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent {
-    sidebarOpen = false;
+    showScrollTop = false;
+
+    private mainEl: HTMLElement | null = null;
 
     constructor(
         private authService: AuthService,
         private router: Router
     ) { }
 
-    toggleSidebar(): void {
-        this.sidebarOpen = !this.sidebarOpen;
+    onMainScroll(event: Event): void {
+        const target = event.target as HTMLElement;
+        this.mainEl = target;
+        this.showScrollTop = target.scrollTop > 300;
     }
 
-    closeSidebar(): void {
-        this.sidebarOpen = false;
+    scrollToTop(): void {
+        this.mainEl?.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     logout(): void {
