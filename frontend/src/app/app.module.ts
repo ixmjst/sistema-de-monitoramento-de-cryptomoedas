@@ -15,6 +15,8 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 import { ThemeSwitchComponent } from './shared/components/theme-switch/theme-switch.component';
 import { LanguageSwitchComponent } from './shared/components/language-switch/language-switch.component';
 import { OverviewComponent } from './features/overview/overview.component';
+import { SharedModule } from './shared/shared.module';
+import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -31,6 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         ThemeSwitchComponent,
         LanguageSwitchComponent,
         OverviewComponent,
+        ToastContainerComponent,
     ],
     imports: [
         BrowserModule,
@@ -39,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
+        SharedModule,
         TranslateModule.forRoot({
             defaultLanguage: 'pt',
             loader: {
