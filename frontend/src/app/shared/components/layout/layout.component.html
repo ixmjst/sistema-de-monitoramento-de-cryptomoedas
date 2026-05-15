@@ -1,10 +1,26 @@
 <div class="layout">
-    <app-navbar (onMenuClick)="toggleSidebar()"></app-navbar>
+    <app-navbar></app-navbar>
     <div class="layout-container">
-        <app-sidebar [open]="sidebarOpen" (onClose)="closeSidebar()"></app-sidebar>
-        <main class="layout-main">
+        <main class="layout-main" (scroll)="onMainScroll($event)">
+            <div class="layout-market-strip">
+                <app-market-ticker></app-market-ticker>
+            </div>
             <router-outlet></router-outlet>
+            <!-- Footer inline no final do conteúdo -->
+            <app-footer></app-footer>
         </main>
     </div>
-    <app-footer></app-footer>
+
+    <!-- Scroll to top — aparece após 300px de scroll -->
+    <button
+        class="layout-scroll-top"
+        [class.visible]="showScrollTop"
+        (click)="scrollToTop()"
+        aria-label="Voltar ao topo"
+        title="Voltar ao topo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 19V6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M6.5 11.5L12 6l5.5 5.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
 </div>

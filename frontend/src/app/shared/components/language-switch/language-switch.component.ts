@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -7,10 +7,12 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./language-switch.component.scss'],
 })
 export class LanguageSwitchComponent {
-    currentLanguage: string = 'pt';
+    @Input() compact = false;
+
+    currentLanguage = 'pt';
     languages = [
-        { code: 'pt', label: '🇵🇹 Português' },
-        { code: 'en', label: '🇬🇧 English' },
+        { code: 'pt', label: 'Português' },
+        { code: 'en', label: 'English' },
     ];
 
     constructor(private translateService: TranslateService) {
