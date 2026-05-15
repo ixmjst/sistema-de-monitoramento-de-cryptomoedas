@@ -19,7 +19,7 @@ abstract class BaseModel
         $this->db = Database::getInstance()->getConnection();
     }
 
-    protected function all()
+    public function all()
     {
         $sql = "SELECT * FROM {$this->table}";
         $stmt = $this->db->prepare($sql);
@@ -27,7 +27,7 @@ abstract class BaseModel
         return $stmt->fetchAll();
     }
 
-    protected function find($id)
+    public function find($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE {$this->primaryKey} = ?";
         $stmt = $this->db->prepare($sql);
@@ -35,7 +35,7 @@ abstract class BaseModel
         return $stmt->fetch();
     }
 
-    protected function create($data)
+    public function create($data)
     {
         $columns = implode(',', array_keys($data));
         $placeholders = implode(',', array_fill(0, count($data), '?'));
@@ -47,7 +47,7 @@ abstract class BaseModel
         return Database::getInstance()->lastInsertId();
     }
 
-    protected function update($id, $data)
+    public function update($id, $data)
     {
         $set = implode(', ', array_map(fn($k) => "$k = ?", array_keys($data)));
         $sql = "UPDATE {$this->table} SET $set WHERE {$this->primaryKey} = ?";
@@ -59,21 +59,21 @@ abstract class BaseModel
         return $stmt->execute($values);
     }
 
-    protected function delete($id)
+    public function delete($id)
     {
         $sql = "DELETE FROM {$this->table} WHERE {$this->primaryKey} = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
     }
 
-    protected function query($sql, $params = [])
+    public function query($sql, $params = [])
     {
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return $stmt;
     }
 
-    protected function paginate($page = 1, $perPage = 15)
+    public function paginate($page = 1, $perPage = 15)
     {
         $offset = ($page - 1) * $perPage;
 

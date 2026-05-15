@@ -8,44 +8,36 @@ class Favorite extends BaseModel
 
     public function getUserFavorites($userId)
     {
-        $sql = "SELECT f.*, c.* FROM {$this->table} f
-                JOIN cryptocurrencies c ON f.crypto_id = c.id
+        $sql = "SELECT f.*, c.name, c.symbol, c.current_price, c.price_change_24h, c.image_url, c.market_cap
+                FROM {$this->table} f
+                LEFT JOIN cryptocurrencies c ON f.crypto_code = c.code
                 WHERE f.user_id = ?
                 ORDER BY f.created_at DESC";
         $stmt = $this->query($sql, [$userId]);
         return $stmt->fetchAll();
     }
 
-    public function addFavorite($userId, $cryptoId, $notes = null)
+    public function addFavorite($userId, $cryptoCode)
     {
         $data = [
             'user_id' => $userId,
-            'crypto_id' => $cryptoId,
-            'notes' => $notes,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'crypto_code' => $cryptoCode,
+            'created_at' => date('Y-m-d H:i:s')
         ];
-
         return $this->create($data);
     }
 
-    public function removeFavorite($userId, $cryptoId)
+    public function removeFavorite($userId, $cryptoCode)
     {
-        $sql = "DELETE FROM {$this->table} WHERE user_id = ? AND crypto_id = ?";
-        $stmt = $this->query($sql, [$userId, $cryptoId]);
+        $sql = "DELETE FROM {$this->table} WHERE user_id = ? AND crypto_code = ?";
+        $stmt = $this->query($sql, [$userId, $cryptoCode]);
         return $stmt->execute();
     }
 
-    public function isFavorite($userId, $cryptoId)
+    public function isFavorite($userId, $cryptoCode)
     {
-        $sql = "SELECT id FROM {$this->table} WHERE user_id = ? AND crypto_id = ?";
-        $stmt = $this->query($sql, [$userId, $cryptoId]);
+        $sql = "SELECT id FROM {$this->table} WHERE user_id = ? AND crypto_code = ?";
+        $stmt = $this->query($sql, [$userId, $cryptoCode]);
         return $stmt->fetch() !== false;
-    }
-
-    public function updateFavorite($id, $data)
-    {
-        $data['updated_at'] = date('Y-m-d H:i:s');
-        return $this->update($id, $data);
     }
 }

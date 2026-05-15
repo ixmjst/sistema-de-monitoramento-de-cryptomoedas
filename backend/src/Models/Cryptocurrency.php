@@ -42,11 +42,12 @@ class Cryptocurrency extends BaseModel
 
     public function getTopCryptos($limit = 50)
     {
+        $limit = (int)$limit;
         $sql = "SELECT * FROM {$this->table} 
                 WHERE market_cap_rank IS NOT NULL 
                 ORDER BY market_cap_rank ASC 
-                LIMIT ?";
-        $stmt = $this->query($sql, [$limit]);
+                LIMIT $limit";
+        $stmt = $this->query($sql);
         return $stmt->fetchAll();
     }
 
