@@ -1,0 +1,113 @@
+/* Scroll-to-Top Button - Estilo Moderno e Destacado */
+
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+
+  /* Dimensões */
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+
+  /* Cores vibrantes e contrastantes */
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+
+  /* Sombra profunda para destaque visual */
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4),
+              0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Transições suaves */
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Animação de entrada */
+  animation: slideIn 0.3s ease-out;
+
+  &:hover {
+    /* Efeito hover: aumento, sombra mais forte, cor mais brilhante */
+    transform: translateY(-6px) scale(1.1);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.5),
+                0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    /* Feedback ao clicar */
+    transform: translateY(-3px) scale(0.98);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4),
+                0 4px 12px rgba(0, 0, 0, 0.15),
+                0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  svg {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+}
+
+/* Animações */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .scroll-to-top-btn {
+    width: 48px;
+    height: 48px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    &:hover {
+      transform: translateY(-4px) scale(1.08);
+    }
+  }
+}
+
+/* Dark Mode Support (se aplicável) */
+@media (prefers-color-scheme: dark) {
+  .scroll-to-top-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4),
+                0 4px 12px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: 0 12px 40px rgba(59, 130, 246, 0.5),
+                  0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+/* Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-to-top-btn,
+  .scroll-to-top-btn svg {
+    animation: none;
+    transition: all 0.1s linear;
+  }
+}
