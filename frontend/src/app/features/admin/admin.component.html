@@ -1,0 +1,567 @@
+<div class="admin-container">
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">Admin</span>
+      <h1>Painel de Administração</h1>
+      <p>Gestão completa do sistema — utilizadores, criptomoedas e configurações.</p>
+      <div class="admin-system-links">
+        <a routerLink="/dashboard" class="btn btn-outline btn-sm">Dashboard</a>
+        <a routerLink="/cryptocurrencies" class="btn btn-outline btn-sm">Criptomoedas</a>
+        <a routerLink="/favorites" class="btn btn-outline btn-sm">Favoritos</a>
+        <a routerLink="/history" class="btn btn-outline btn-sm">Histórico</a>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" (click)="refreshActiveTab()" [disabled]="isLoadingActiveTab">
+        Atualizar
+      </button>
+      <button class="btn btn-outline btn-sm" (click)="exportLogs()">
+        Exportar logs
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="admin-tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'dashboard'" (click)="setTab('dashboard')">
+      Dashboard
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'users'" (click)="setTab('users')">
+      Utilizadores
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'cryptocurrencies'" (click)="setTab('cryptocurrencies')">
+      Criptomoedas
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'password-resets'" (click)="setTab('password-resets')">
+      Recuperações
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'system'" (click)="setTab('system')">
+      Sistema
+    </button>
+  </div>
+
+  <!-- Dashboard Tab -->
+  <ng-container *ngIf="activeTab === 'dashboard'">
+    <div class="loading-container" *ngIf="loading.dashboard">
+      <div class="spinner"></div>
+      <p>Carregando...</p>
+    </div>
+
+    <ng-container *ngIf="dashboard && !loading.dashboard">
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon users">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6"/></svg>
+          </div>
+          <div class="stat-content">
+            <h3>{{ dashboard.users.total_users ?? 0 }}</h3>
+            <p>Total de Utilizadores</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon active-users">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6"/><circle cx="19" cy="8" r="3" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="stat-content">
+            <h3>{{ dashboard.users.total_active ?? 0 }}</h3>
+            <p>Utilizadores Ativos</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon admins">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-2.8 8.4-7 10-4.2-1.6-7-5.5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div class="stat-content">
+            <h3>{{ dashboard.users.total_admins ?? 0 }}</h3>
+            <p>Administradores</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cryptos">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+          </div>
+          <div class="stat-content">
+            <h3>{{ dashboard.cryptocurrencies.total }}</h3>
+            <p>Criptomoedas</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon history">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 8 8"/><path d="M12 4v8h8"/></svg>
+          </div>
+          <div class="stat-content">
+            <h3>{{ dashboard.history.total ?? 0 }}</h3>
+            <p>Entradas Histórico</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon env">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 20h16"/><path d="M8 16V10"/><path d="M12 16V6"/><path d="M16 16V13"/></svg>
+          </div>
+          <div class="stat-content">
+            <h3>{{ dashboard.system.app_env }}</h3>
+            <p>Ambiente</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ops Grid -->
+      <div class="admin-ops-grid">
+        <div class="card ops-card">
+          <div class="card-header">
+            <h2>Saúde operacional</h2>
+            <span class="live-pill">Tempo real</span>
+          </div>
+          <div class="card-body health-list">
+            <div class="health-row" *ngFor="let item of adminHealthItems" [ngClass]="item.status">
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+            </div>
+            <div class="no-results" *ngIf="adminHealthItems.length === 0">Sem dados de saúde</div>
+          </div>
+        </div>
+
+        <div class="card ops-card">
+          <div class="card-header"><h2>Recomendações essenciais</h2></div>
+          <div class="card-body recommendation-list">
+            <p *ngFor="let item of adminRecommendations">{{ item }}</p>
+          </div>
+        </div>
+
+        <div class="card ops-card">
+          <div class="card-header"><h2>Ações rápidas</h2></div>
+          <div class="card-body quick-actions">
+            <button class="btn btn-secondary btn-sm" (click)="setTab('users')">Gerir acessos</button>
+            <button class="btn btn-secondary btn-sm" (click)="setTab('cryptocurrencies')">Auditar moedas</button>
+            <button class="btn btn-secondary btn-sm" (click)="setTab('password-resets')">Recuperações</button>
+            <button class="btn btn-secondary btn-sm" (click)="setTab('system')">Ver sistema</button>
+            <button class="btn btn-primary btn-sm" (click)="refreshActiveTab()">Sincronizar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row -->
+      <div class="dashboard-bottom">
+        <!-- Top Criptomoedas -->
+        <div class="card top-cryptos">
+          <div class="card-header"><h2>Top Criptomoedas</h2></div>
+          <div class="card-body">
+            <ng-container *ngIf="dashboard.cryptocurrencies.top.length > 0; else noTopCryptos">
+              <div class="minicrypto-row" *ngFor="let c of dashboard.cryptocurrencies.top; let i = index">
+                <span class="rank">#{{ i + 1 }}</span>
+                <span class="name">{{ c.name }}</span>
+                <span class="symbol">{{ c.symbol | uppercase }}</span>
+                <span class="price" [class.positive]="toNumber(c.price_change_24h) >= 0" [class.negative]="toNumber(c.price_change_24h) < 0">
+                  ${{ toNumber(c.current_price) | number:'1.2-2' }}
+                </span>
+              </div>
+            </ng-container>
+            <ng-template #noTopCryptos>
+              <p class="empty-hint">Nenhuma criptomoeda com dados de preço disponível.<br>
+                <button class="btn btn-secondary btn-sm" style="margin-top:8px" (click)="setTab('cryptocurrencies')">Gerir criptomoedas</button>
+              </p>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Atividade Recente -->
+        <div class="card recent-activity">
+          <div class="card-header"><h2>Atividade Recente</h2></div>
+          <div class="card-body">
+            <div class="activity-meta">
+              <div class="activity-meta-row">
+                <span class="meta-label">Último login</span>
+                <span class="meta-value">{{ formatDate(dashboard.users.last_login_any) }}</span>
+              </div>
+              <div class="activity-meta-row">
+                <span class="meta-label">Última ação</span>
+                <span class="meta-value">{{ formatDate(dashboard.history.last_activity) }}</span>
+              </div>
+              <div class="activity-meta-row">
+                <span class="meta-label">Total de ações</span>
+                <span class="meta-value">{{ dashboard.history.total ?? 0 }}</span>
+              </div>
+              <div class="activity-meta-row">
+                <span class="meta-label">Tipos de ação</span>
+                <span class="meta-value">{{ dashboard.history.action_types ?? 0 }}</span>
+              </div>
+            </div>
+
+            <div class="recent-entries" *ngIf="(dashboard.history.recent?.length ?? 0) > 0">
+              <h4>Últimas entradas</h4>
+              <div class="recent-entry" *ngFor="let entry of dashboard.history.recent">
+                <span class="entry-action">{{ entry.action }}</span>
+                <span class="entry-detail">
+                  {{ entry.user_name || 'Sistema' }}
+                  <ng-container *ngIf="entry.crypto_name"> · {{ entry.crypto_name }}</ng-container>
+                </span>
+                <span class="entry-date">{{ formatDate(entry.created_at) }}</span>
+              </div>
+            </div>
+            <p class="empty-hint" *ngIf="!(dashboard.history.recent?.length ?? 0)">
+              Nenhuma atividade registada ainda.
+            </p>
+          </div>
+        </div>
+
+        <!-- Utilizadores -->
+        <div class="card user-summary">
+          <div class="card-header"><h2>Resumo de Utilizadores</h2></div>
+          <div class="card-body">
+            <div class="user-stat-row">
+              <span>Total</span>
+              <strong>{{ dashboard.users.total_users ?? 0 }}</strong>
+            </div>
+            <div class="user-stat-row positive">
+              <span>Ativos</span>
+              <strong>{{ dashboard.users.total_active ?? 0 }}</strong>
+            </div>
+            <div class="user-stat-row negative">
+              <span>Inativos</span>
+              <strong>{{ dashboard.users.total_inactive ?? 0 }}</strong>
+            </div>
+            <div class="user-stat-row admin">
+              <span>Administradores</span>
+              <strong>{{ dashboard.users.total_admins ?? 0 }}</strong>
+            </div>
+            <div class="user-stat-row">
+              <span>Último login</span>
+              <strong>{{ formatDate(dashboard.users.last_login_any) }}</strong>
+            </div>
+            <div class="user-bar" *ngIf="(dashboard.users.total_users ?? 0) > 0">
+              <div class="bar-active" [style.width.%]="((dashboard.users.total_active ?? 0) / (dashboard.users.total_users ?? 1)) * 100"></div>
+            </div>
+            <p class="bar-legend">
+              {{ ((dashboard.users.total_active ?? 0) / (dashboard.users.total_users || 1) * 100).toFixed(0) }}% ativos
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+
+    <!-- Empty state when dashboard loaded but has no data -->
+    <div class="empty-dashboard" *ngIf="!loading.dashboard && !dashboard">
+      <p>Não foi possível carregar os dados do dashboard.</p>
+      <button class="btn btn-primary btn-sm" (click)="loadDashboard()">Tentar novamente</button>
+    </div>
+  </ng-container>
+
+  <!-- Users Tab -->
+  <ng-container *ngIf="activeTab === 'users'">
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" [ngModel]="searchQuery" (ngModelChange)="onSearchChange($event)" placeholder="Buscar por nome, e-mail ou perfil..." />
+      </div>
+      <div class="summary-pills">
+        <span>Total: {{ totalUsers }}</span>
+        <span>Ativos: {{ activeUsersCount }}</span>
+        <span>Inativos: {{ inactiveUsersCount }}</span>
+        <span>Admin: {{ adminCount }}</span>
+      </div>
+      <button class="btn btn-primary btn-sm" (click)="showNewUserForm = !showNewUserForm">
+        {{ showNewUserForm ? 'Fechar' : 'Adicionar Utilizador' }}
+      </button>
+    </div>
+
+    <div class="card form-panel" *ngIf="showNewUserForm">
+      <div class="card-header"><h2>Criar novo utilizador</h2></div>
+      <div class="card-body form-body">
+        <div class="form-row">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="newUser.name" placeholder="Nome completo" />
+        </div>
+        <div class="form-row">
+          <label>E-mail</label>
+          <input type="email" [(ngModel)]="newUser.email" placeholder="e-mail@exemplo.com" />
+        </div>
+        <div class="form-row">
+          <label>Senha</label>
+          <input type="password" [(ngModel)]="newUser.password" placeholder="Senha segura" />
+        </div>
+        <div class="form-row">
+          <label>Perfil</label>
+          <select [(ngModel)]="newUser.role">
+            <option value="user">Utilizador</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" (click)="createUser()">Criar utilizador</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-container" *ngIf="loading.users">
+      <div class="spinner"></div>
+      <p>Carregando...</p>
+    </div>
+
+    <div class="card" *ngIf="!loading.users">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Utilizador</th>
+              <th>Perfil</th>
+              <th>Último login</th>
+              <th>Estado</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of filteredUsers" [class.inactive]="user.deleted_at">
+              <td>
+                <div class="user-cell">
+                  <span class="avatar">{{ getUserInitial(user.name) }}</span>
+                  <div>
+                    <strong>{{ user.name }}</strong>
+                    <span>{{ user.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <select [ngModel]="user.role" (ngModelChange)="updateUser(user, { role: $event })" [disabled]="savingId === user.id">
+                  <option value="user">Utilizador</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </td>
+              <td>{{ formatDate(user.last_login) }}</td>
+              <td>
+                <span class="status" [class.active]="!user.deleted_at" [class.inactive]="user.deleted_at">
+                  {{ user.deleted_at ? 'Inativo' : 'Ativo' }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-danger btn-sm" *ngIf="!user.deleted_at" (click)="deactivateUser(user)" [disabled]="savingId === user.id">
+                  Desativar
+                </button>
+                <button class="btn btn-success btn-sm" *ngIf="user.deleted_at" (click)="restoreUser(user)" [disabled]="savingId === user.id">
+                  Restaurar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="no-results" *ngIf="filteredUsers.length === 0">Nenhum resultado</div>
+    </div>
+  </ng-container>
+
+  <!-- Password Reset Requests Tab -->
+  <ng-container *ngIf="activeTab === 'password-resets'">
+    <div class="toolbar">
+      <div class="summary-pills">
+        <span>Pedidos: {{ passwordResetRequests.length }}</span>
+        <span *ngIf="loading.requests">Carregando...</span>
+      </div>
+      <button class="btn btn-secondary btn-sm" (click)="refreshActiveTab()" [disabled]="loading.requests">
+        Atualizar
+      </button>
+    </div>
+
+    <div class="loading-container" *ngIf="loading.requests">
+      <div class="spinner"></div>
+      <p>Carregando pedidos de recuperação...</p>
+    </div>
+
+    <div class="card" *ngIf="!loading.requests">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>E-mail</th>
+              <th>Solicitado em</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let request of passwordResetRequests">
+              <td>{{ request.id }}</td>
+              <td>{{ request.user_email }}</td>
+              <td>{{ formatDate(request.created_at) }}</td>
+              <td>
+                <span class="status pending">{{ request.status }}</span>
+              </td>
+              <td>
+                <button class="btn btn-primary btn-sm" (click)="approveResetRequest(request.id)" [disabled]="approvingId === request.id">
+                  {{ approvingId === request.id ? 'Aprovando...' : 'Aprovar' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="no-results" *ngIf="!loading.requests && passwordResetRequests.length === 0">Nenhum pedido de recuperação pendente</div>
+    </div>
+  </ng-container>
+
+  <!-- Cryptocurrencies Tab -->
+  <ng-container *ngIf="activeTab === 'cryptocurrencies'">
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" [ngModel]="cryptoSearchQuery" (ngModelChange)="onCryptoSearchChange($event)" placeholder="Buscar criptomoedas..." />
+      </div>
+      <div class="summary-pills">
+        <span>Total: {{ cryptoTotal }}</span>
+        <span>Página: {{ cryptoPage }} / {{ cryptoTotalPages }}</span>
+      </div>
+      <button class="btn btn-primary btn-sm" (click)="showNewCryptoForm = !showNewCryptoForm">
+        {{ showNewCryptoForm ? 'Fechar' : 'Adicionar Criptomoeda' }}
+      </button>
+    </div>
+
+    <div class="card form-panel" *ngIf="showNewCryptoForm">
+      <div class="card-header"><h2>Nova Criptomoeda</h2></div>
+      <div class="card-body form-body">
+        <div class="form-row">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="newCrypto.name" placeholder="Bitcoin" />
+        </div>
+        <div class="form-row">
+          <label>Símbolo</label>
+          <input type="text" [(ngModel)]="newCrypto.symbol" placeholder="BTC" />
+        </div>
+        <div class="form-row">
+          <label>Código</label>
+          <input type="text" [(ngModel)]="newCrypto.code" placeholder="bitcoin" />
+        </div>
+        <div class="form-row">
+          <label>Preço atual</label>
+          <input type="number" [(ngModel)]="newCrypto.current_price" placeholder="0.00" />
+        </div>
+        <div class="form-row split-row">
+          <div>
+            <label>Cap. de mercado</label>
+            <input type="number" [(ngModel)]="newCrypto.market_cap" placeholder="Opcional" />
+          </div>
+          <div>
+            <label>Rank</label>
+            <input type="number" [(ngModel)]="newCrypto.market_cap_rank" placeholder="Opcional" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" (click)="createCrypto()">Salvar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-container" *ngIf="loading.cryptocurrencies">
+      <div class="spinner"></div>
+      <p>Carregando...</p>
+    </div>
+
+    <div class="card" *ngIf="!loading.cryptocurrencies">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Símbolo</th>
+              <th>Código</th>
+              <th>Preço</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of filteredCryptos; let i = index">
+              <td>{{ cryptoPageIndex(i) }}</td>
+              <td><strong>{{ c.name }}</strong></td>
+              <td>{{ c.symbol }}</td>
+              <td><code>{{ c.code }}</code></td>
+              <td>${{ toNumber(c.current_price) | number:'1.2-2' }}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm" (click)="editCrypto(c)" style="margin-right: 8px;">Editar</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteCrypto(c.id)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" *ngIf="cryptoTotalPages > 1">
+        <button class="btn btn-secondary btn-sm" (click)="changeCryptoPage(cryptoPage - 1)" [disabled]="cryptoPage === 1">Anterior</button>
+        <span>Página {{ cryptoPage }} de {{ cryptoTotalPages }}</span>
+        <button class="btn btn-secondary btn-sm" (click)="changeCryptoPage(cryptoPage + 1)" [disabled]="cryptoPage === cryptoTotalPages">Próxima</button>
+      </div>
+
+      <div class="no-results" *ngIf="filteredCryptos.length === 0">Nenhuma criptomoeda encontrada</div>
+    </div>
+
+    <div class="card form-panel" *ngIf="editingCrypto">
+      <div class="card-header"><h2>Editar Criptomoeda</h2></div>
+      <div class="card-body form-body">
+        <div class="form-row">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="editingCrypto.name" />
+        </div>
+        <div class="form-row">
+          <label>Símbolo</label>
+          <input type="text" [(ngModel)]="editingCrypto.symbol" />
+        </div>
+        <div class="form-row">
+          <label>Preço atual</label>
+          <input type="number" [(ngModel)]="editingCrypto.current_price" />
+        </div>
+        <div class="form-row split-row">
+          <div>
+            <label>Cap. de mercado</label>
+            <input type="number" [(ngModel)]="editingCrypto.market_cap" />
+          </div>
+          <div>
+            <label>Rank</label>
+            <input type="number" [(ngModel)]="editingCrypto.market_cap_rank" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" (click)="saveCryptoChanges()" [disabled]="savingId === editingCrypto.id">Salvar alterações</button>
+          <button class="btn btn-secondary" (click)="cancelEditCrypto()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- System Tab -->
+  <ng-container *ngIf="activeTab === 'system'">
+    <div class="loading-container" *ngIf="loading.system">
+      <div class="spinner"></div>
+      <p>Carregando...</p>
+    </div>
+
+    <div class="system-grid" *ngIf="systemInfo">
+      <div class="card">
+        <div class="card-header"><h2>PHP</h2></div>
+        <div class="card-body">
+          <p><strong>Versão:</strong> {{ systemInfo.php.version }}</p>
+          <p><strong>Memory Limit:</strong> {{ systemInfo.php.memory_limit }}</p>
+          <p><strong>Max Upload:</strong> {{ systemInfo.php.max_upload }}</p>
+          <p><strong>Extensões:</strong> {{ systemInfo.php.extensions.length }}</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h2>Base de Dados</h2></div>
+        <div class="card-body">
+          <div class="db-row" *ngFor="let t of systemInfo.database">
+            <span class="db-name">{{ t.name }}</span>
+            <span class="db-rows">{{ t.rows }} linhas</span>
+            <span class="db-size">{{ formatBytes(t.size) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h2>Ambiente</h2></div>
+        <div class="card-body">
+          <p><strong>Environment:</strong> {{ systemInfo.environment }}</p>
+          <p><strong>Server Time:</strong> {{ systemInfo.time }}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
