@@ -1,6 +1,7 @@
-<div class="language-switch">
-    <button class="lang-btn" [ngClass]="{ active: currentLanguage === lang.code }" *ngFor="let lang of languages"
-        (click)="changeLanguage(lang.code)" [title]="lang.label">
+<div class="language-switch" role="group" aria-label="Idioma">
+    <button class="lang-btn" [class.active]="currentLanguage === lang.code"
+        *ngFor="let lang of languages"
+        (click)="changeLanguage(lang.code)" [title]="lang.label" [attr.aria-label]="lang.label">
         {{ lang.code.toUpperCase() }}
     </button>
 </div>
