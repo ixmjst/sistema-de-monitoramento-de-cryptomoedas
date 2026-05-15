@@ -38,10 +38,17 @@ class PortfolioController extends BaseController
 
         $input = $this->getJsonInput();
 
+        // Accept either crypto_code (string) or crypto_id (int)
+        $cryptoCode = $input['crypto_code'] ?? null;
+        $cryptoId   = $input['crypto_id'] ?? null;
+
+        if (!$cryptoCode && !$cryptoId) {
+            return $this->error('Validation failed', 422, ['crypto_code' => 'The crypto_code field is required.']);
+        }
+
         $errors = $this->validateInput($input, [
-            'crypto_id' => ['required' => true, 'type' => 'number'],
-            'quantity' => ['required' => true, 'type' => 'number'],
-            'purchase_price' => ['required' => true, 'type' => 'number'],
+            'quantity'      => ['required' => true, 'type' => 'number'],
+            'purchase_price'=> ['required' => true, 'type' => 'number'],
             'purchase_date' => ['required' => true]
         ]);
 
@@ -50,14 +57,30 @@ class PortfolioController extends BaseController
         }
 
         try {
-            $crypto = $this->cryptoModel->getCryptoById($input['crypto_id']);
-            if (!$crypto) {
-                return $this->error('Cryptocurrency not found', 404);
+            // Resolve crypto_id from code if needed
+            if (!$cryptoId && $cryptoCode) {
+                $crypto = $this->cryptoModel->getCryptoByCode($cryptoCode);
+                if (!$crypto) {
+                    // Auto-create a minimal record so the FK is satisfied
+                    $cryptoId = $this->cryptoModel->create([
+                        'code'       => $cryptoCode,
+                        'name'       => $input['name'] ?? $cryptoCode,
+                        'symbol'     => $input['symbol'] ?? strtoupper(substr($cryptoCode, 0, 4)),
+                        'created_at' => date('Y-m-d H:i:s'),
+                    ]);
+                } else {
+                    $cryptoId = $crypto['id'];
+                }
+            } else {
+                $crypto = $this->cryptoModel->getCryptoById($cryptoId);
+                if (!$crypto) {
+                    return $this->error('Cryptocurrency not found', 404);
+                }
             }
 
             $id = $this->portfolioModel->addPortfolioItem(
                 $user['id'],
-                $input['crypto_id'],
+                $cryptoId,
                 $input['quantity'],
                 $input['purchase_price'],
                 $input['purchase_date'],
