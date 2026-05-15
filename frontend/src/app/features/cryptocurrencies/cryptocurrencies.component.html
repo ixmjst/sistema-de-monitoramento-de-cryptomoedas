@@ -2,7 +2,7 @@
   <div class="page-header">
     <div>
       <h1>{{ 'nav.cryptocurrencies' | translate }}</h1>
-      <p class="text-muted">Track and monitor all cryptocurrencies</p>
+      <p class="text-muted">{{ 'crypto.titleText' | translate }}</p>
     </div>
     <div class="search-box">
       <span class="search-icon">
@@ -11,7 +11,7 @@
           <path d="M15.5 15.5l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
         </svg>
       </span>
-      <input type="text" [formControl]="searchControl" placeholder="{{ 'common.search' | translate }}..."
+      <input type="text" [formControl]="searchControl" [placeholder]="'overview.searchPlaceholder' | translate"
         class="search-input" />
     </div>
   </div>
@@ -22,21 +22,39 @@
   </div>
 
   <div class="card" *ngIf="!loading">
+    <div class="market-tools">
+      <div>
+        <strong>Comparar moedas</strong>
+        <span>Selecione favoritos e acompanhe lado a lado.</span>
+      </div>
+      <div>
+        <strong>Indicadores</strong>
+        <span>Preço, 1h, 24h, 7d, volume e market cap.</span>
+      </div>
+      <div>
+        <strong>Alertas</strong>
+        <span>Use favoritos para monitorar subidas e quedas.</span>
+      </div>
+    </div>
     <div class="table-wrapper">
       <table class="crypto-table">
         <thead>
           <tr>
             <th class="col-rank">#</th>
-            <th class="col-name">Name</th>
+            <th class="col-name">{{ 'crypto.name' | translate }}</th>
+            <th>1h</th>
             <th class="col-price sortable" (click)="sortBy('currentPrice')">
               {{ 'crypto.price' | translate }} {{ getSortIcon('currentPrice') }}
             </th>
             <th class="col-change sortable" (click)="sortBy('priceChange24h')">
               {{ 'crypto.change24h' | translate }} {{ getSortIcon('priceChange24h') }}
             </th>
+            <th>7d</th>
+            <th>{{ 'crypto.volume' | translate }}</th>
             <th class="col-market-cap sortable" (click)="sortBy('marketCap')">
               {{ 'crypto.marketCap' | translate }} {{ getSortIcon('marketCap') }}
             </th>
+            <th>Gráfico</th>
             <th class="col-actions">{{ 'common.actions' | translate }}</th>
           </tr>
         </thead>
@@ -53,16 +71,29 @@
                 </div>
               </div>
             </td>
+            <td [class.positive]="getHourlyChange(crypto) >= 0" [class.negative]="getHourlyChange(crypto) < 0">
+              {{ getHourlyChange(crypto) >= 0 ? '+' : '' }}{{ getHourlyChange(crypto).toFixed(2) }}%
+            </td>
             <td class="col-price">{{ formatPrice(crypto.currentPrice) }}</td>
             <td class="col-change">
               <span [class]="'badge ' + (crypto.priceChange24h >= 0 ? 'badge-success' : 'badge-danger')">
                 {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
               </span>
             </td>
+            <td [class.positive]="getWeeklyChange(crypto) >= 0" [class.negative]="getWeeklyChange(crypto) < 0">
+              {{ getWeeklyChange(crypto) >= 0 ? '+' : '' }}{{ getWeeklyChange(crypto).toFixed(2) }}%
+            </td>
+            <td>{{ formatMarketCap(crypto.volume24h || 0) }}</td>
             <td class="col-market-cap">{{ formatMarketCap(crypto.marketCap || 0) }}</td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 170 48" preserveAspectRatio="none"
+                [class.negative]="crypto.priceChange24h < 0">
+                <polyline [attr.points]="getSparklinePoints(crypto)" />
+              </svg>
+            </td>
             <td class="col-actions">
               <button class="btn-icon" [class.active]="isFavorite(crypto.id)" (click)="toggleFavorite(crypto)"
-                [title]="isFavorite(crypto.id) ? 'Remove from favorites' : 'Add to favorites'">
+                [title]="(isFavorite(crypto.id) ? 'crypto.removeFavorite' : 'crypto.addFavorite') | translate">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
                     stroke="currentColor" stroke-width="1.8" fill="none" />
