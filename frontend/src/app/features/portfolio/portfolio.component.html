@@ -3,15 +3,15 @@
   <!-- Header -->
   <div class="page-header">
     <div>
-      <h1>Meu Portfólio</h1>
-      <p class="text-muted">Acompanhe os seus investimentos em criptomoedas</p>
+      <h1>{{ 'portfolio.title' | translate }}</h1>
+      <p class="text-muted">{{ 'portfolio.subtitle' | translate }}</p>
     </div>
     <button class="btn btn-primary btn-sm" (click)="toggleForm()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <path d="M12 5v14M5 12h14"/>
       </svg>
-      {{ showForm ? 'Fechar formulário' : 'Adicionar criptomoeda' }}
+      {{ showForm ? ('portfolio.closeForm' | translate) : ('portfolio.addCrypto' | translate) }}
     </button>
   </div>
 
@@ -24,7 +24,7 @@
         </svg>
       </div>
       <div>
-        <p class="summary-label">Valor Atual</p>
+        <p class="summary-label">{{ 'portfolio.currentValue' | translate }}</p>
         <h3 class="summary-value">{{ formatPrice(totalValue) }}</h3>
       </div>
     </div>
@@ -35,7 +35,7 @@
         </svg>
       </div>
       <div>
-        <p class="summary-label">Total Investido</p>
+        <p class="summary-label">{{ 'portfolio.totalInvested' | translate }}</p>
         <h3 class="summary-value">{{ formatPrice(totalInvested) }}</h3>
       </div>
     </div>
@@ -46,7 +46,7 @@
         </svg>
       </div>
       <div>
-        <p class="summary-label">Lucro / Prejuízo</p>
+        <p class="summary-label">{{ 'portfolio.gainLoss' | translate }}</p>
         <h3 class="summary-value" [class.positive]="totalGain >= 0" [class.negative]="totalGain < 0">
           {{ formatPrice(totalGain) }}
         </h3>
@@ -62,7 +62,7 @@
         </svg>
       </div>
       <div>
-        <p class="summary-label">Posições</p>
+        <p class="summary-label">{{ 'portfolio.positions' | translate }}</p>
         <h3 class="summary-value">{{ portfolioItems.length }}</h3>
       </div>
     </div>
@@ -71,7 +71,7 @@
   <!-- Add / Edit Form -->
   <div class="form-panel" *ngIf="showForm">
     <div class="form-panel-header">
-      <h2>{{ editingId ? 'Editar posição' : 'Nova posição' }}</h2>
+      <h2>{{ editingId ? ('portfolio.editPosition' | translate) : ('portfolio.newPosition' | translate) }}</h2>
       <button class="btn-close" (click)="closeForm()" aria-label="Fechar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M18 6 6 18M6 6l12 12"/>
@@ -81,45 +81,45 @@
 
     <form [formGroup]="portfolioForm" (ngSubmit)="saveItem()" class="form-grid">
       <div class="form-field form-field--full">
-        <label>Criptomoeda *</label>
+        <label>{{ 'portfolio.crypto' | translate }}</label>
         <select formControlName="crypto_code">
-          <option value="" disabled>Selecione uma criptomoeda</option>
+          <option value="" disabled>{{ 'portfolio.selectCrypto' | translate }}</option>
           <option *ngFor="let crypto of filteredCryptos" [value]="crypto.id">
-            {{ crypto.name }} ({{ crypto.symbol?.toUpperCase() }})
+            {{ crypto.name }} ({{ crypto.symbol.toUpperCase() }})
           </option>
         </select>
       </div>
 
       <div class="form-field">
-        <label>Quantidade *</label>
+        <label>{{ 'portfolio.quantity' | translate }}</label>
         <input type="number" formControlName="quantity" placeholder="Ex: 0.5" step="0.00001" min="0"/>
       </div>
 
       <div class="form-field">
-        <label>Preço de Compra (USD) *</label>
+        <label>{{ 'portfolio.purchasePrice' | translate }}</label>
         <input type="number" formControlName="purchase_price" placeholder="Ex: 30000" step="0.01" min="0"/>
       </div>
 
       <div class="form-field">
-        <label>Data de Compra *</label>
+        <label>{{ 'portfolio.purchaseDate' | translate }}</label>
         <input type="date" formControlName="purchase_date"/>
       </div>
 
       <div class="form-field">
-        <label>Notas</label>
-        <input type="text" formControlName="notes" placeholder="Opcional"/>
+        <label>{{ 'portfolio.notes' | translate }}</label>
+        <input type="text" formControlName="notes" [placeholder]="'portfolio.optional' | translate"/>
       </div>
 
       <div class="form-actions">
         <label *ngIf="!editingId" class="keep-open-checkbox" style="margin-right: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--color-text-secondary); cursor: pointer; user-select: none;">
           <input type="checkbox" formControlName="keepOpen" style="width: auto; margin: 0; cursor: pointer;" />
-          Continuar adicionando
+          {{ 'portfolio.keepAdding' | translate }}
         </label>
         <button type="submit" class="btn btn-primary btn-sm">
-          {{ editingId ? 'Atualizar' : 'Adicionar' }}
+          {{ editingId ? ('portfolio.update' | translate) : ('portfolio.add' | translate) }}
         </button>
         <button type="button" class="btn btn-secondary btn-sm" (click)="closeForm()">
-          Cancelar
+          {{ 'portfolio.cancel' | translate }}
         </button>
       </div>
     </form>
@@ -128,7 +128,7 @@
   <!-- Loading -->
   <div class="loading-state" *ngIf="loading">
     <div class="spinner"></div>
-    <p>Carregando portfólio...</p>
+    <p>{{ 'portfolio.loading' | translate }}</p>
   </div>
 
   <!-- Portfolio Cards -->
@@ -154,13 +154,13 @@
           </div>
         </div>
         <div class="position-actions">
-          <button class="action-btn" (click)="editItem(item)" title="Editar">
+          <button class="action-btn" (click)="editItem(item)" [title]="'portfolio.edit' | translate">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z"/>
             </svg>
           </button>
-          <button class="action-btn action-btn--delete" (click)="deleteItem(item)" title="Remover">
+          <button class="action-btn action-btn--delete" (click)="deleteItem(item)" [title]="'portfolio.remove' | translate">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
               <path d="M8 7h8M10 11v6M14 11v6"/>
               <path d="M5 7h14l-1.5 12.5a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9L5 7Z"/>
@@ -173,19 +173,19 @@
       <!-- Metrics -->
       <div class="position-metrics">
         <div class="metric">
-          <span class="metric-label">Quantidade</span>
+          <span class="metric-label">{{ 'portfolio.quantityLabel' | translate }}</span>
           <span class="metric-value">{{ formatQuantity(item.quantity) }}</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Preço de compra</span>
+          <span class="metric-label">{{ 'portfolio.purchasePriceLabel' | translate }}</span>
           <span class="metric-value">{{ formatPrice(item.purchase_price) }}</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Preço atual</span>
+          <span class="metric-label">{{ 'portfolio.currentPriceLabel' | translate }}</span>
           <span class="metric-value">{{ formatPrice(item.current_price || item.purchase_price) }}</span>
         </div>
         <div class="metric">
-          <span class="metric-label">Valor atual</span>
+          <span class="metric-label">{{ 'portfolio.currentValueLabel' | translate }}</span>
           <span class="metric-value metric-value--highlight">
             {{ formatPrice(item.quantity * (item.current_price || item.purchase_price)) }}
           </span>
@@ -205,7 +205,7 @@
       </div>
 
       <div class="position-date" *ngIf="item.purchase_date">
-        Comprado em {{ item.purchase_date | date:'dd/MM/yyyy' }}
+        {{ 'portfolio.purchasedOn' | translate }} {{ item.purchase_date | date:'dd/MM/yyyy' }}
       </div>
       <div class="position-notes" *ngIf="item.notes">{{ item.notes }}</div>
     </div>
@@ -214,9 +214,9 @@
   <!-- Empty State -->
   <div class="empty-state" *ngIf="!loading && portfolioItems.length === 0 && !showForm">
     <div class="empty-icon">📊</div>
-    <h2>Portfólio vazio</h2>
-    <p>Adicione as suas posições para acompanhar o desempenho dos investimentos.</p>
-    <button class="btn btn-primary btn-sm" (click)="toggleForm()">Adicionar primeira criptomoeda</button>
+    <h2>{{ 'portfolio.emptyTitle' | translate }}</h2>
+    <p>{{ 'portfolio.emptyText' | translate }}</p>
+    <button class="btn btn-primary btn-sm" (click)="toggleForm()">{{ 'portfolio.addFirst' | translate }}</button>
   </div>
 
 </div>

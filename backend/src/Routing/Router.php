@@ -58,6 +58,7 @@ class Router
         $this->routes['POST']['/admin/users'] = ['controller' => 'AdminController', 'method' => 'createUser'];
         $this->routes['PUT']['/admin/users/(\d+)'] = ['controller' => 'AdminController', 'method' => 'updateUser'];
         $this->routes['DELETE']['/admin/users/(\d+)'] = ['controller' => 'AdminController', 'method' => 'deleteUser'];
+        $this->routes['DELETE']['/admin/users/(\d+)/eliminate'] = ['controller' => 'AdminController', 'method' => 'eliminateUser'];
         $this->routes['POST']['/admin/users/(\d+)/restore'] = ['controller' => 'AdminController', 'method' => 'restoreUser'];
         $this->routes['GET']['/admin/cryptocurrencies'] = ['controller' => 'AdminController', 'method' => 'cryptocurrencies'];
         $this->routes['POST']['/admin/cryptocurrencies'] = ['controller' => 'AdminController', 'method' => 'createCryptocurrency'];

@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { PortfolioRoutingModule } from './portfolio-routing.module';
 import { PortfolioComponent } from './portfolio.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [PortfolioComponent],
@@ -11,7 +12,8 @@ import { PortfolioComponent } from './portfolio.component';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    PortfolioRoutingModule
+    PortfolioRoutingModule,
+    TranslateModule
   ]
 })
 export class PortfolioModule { }

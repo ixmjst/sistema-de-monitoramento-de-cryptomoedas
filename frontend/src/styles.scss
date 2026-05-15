@@ -140,6 +140,30 @@ html[data-theme="dark"] {
     --primary: var(--color-primary);
     --surface: var(--layout-surface);
     --border: var(--surface-border);
+
+    /* Explicit dark override variables to guarantee dark styling across all elements */
+    --color-bg-primary: #0B0F1A;
+    --color-bg-secondary: #111827;
+    --color-bg-tertiary: #1E293B;
+    --color-bg-hover: #253750;
+    
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #CAD5E2;
+    --color-text-tertiary: #96A5B8;
+    
+    --page-background: linear-gradient(180deg, #0B0F1A 0%, #111827 100%);
+    --layout-surface: rgba(30, 41, 59, 0.85);
+    --surface-border: rgba(148, 163, 184, 0.15);
+    --surface-highlight: rgba(59, 130, 246, 0.08);
+    --surface-hover: rgba(59, 130, 246, 0.12);
+
+    /* Invert native password reveal SVG in dark mode so it's clearly visible */
+    input[type="password"]::-ms-reveal {
+        filter: invert(100%);
+    }
+    input[type="password"]::-webkit-credentials-auto-fill-button {
+        filter: invert(100%);
+    }
 }
 
 

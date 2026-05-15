@@ -89,7 +89,7 @@ class AdminController extends BaseController
 
     public function updateUser($id)
     {
-        $this->requireAdmin();
+        $currentUser = $this->requireAdmin();
         $input = $this->getJsonInput() ?? [];
 
         $allowed = ['name', 'email', 'role'];
@@ -97,6 +97,10 @@ class AdminController extends BaseController
 
         if (isset($data['role']) && !in_array($data['role'], ['admin', 'user'], true)) {
             return $this->error('Invalid role', 422);
+        }
+
+        if (isset($data['role']) && $data['role'] !== 'admin' && (int) $currentUser['id'] === (int) $id) {
+            return $this->error('You cannot demote your own admin account role', 422);
         }
 
         if (empty($data)) {
@@ -116,6 +120,17 @@ class AdminController extends BaseController
 
         $this->userModel->softDeleteUser($id);
         $this->success(null, 'User deactivated');
+    }
+
+    public function eliminateUser($id)
+    {
+        $currentUser = $this->requireAdmin();
+        if ((int) $currentUser['id'] === (int) $id) {
+            return $this->error('You cannot permanently delete your own admin account', 422);
+        }
+
+        $this->userModel->deleteUser($id);
+        $this->success(null, 'User permanently deleted');
     }
 
     public function restoreUser($id)
@@ -278,12 +293,11 @@ class AdminController extends BaseController
 
         // Generate a one-time reset token
         $token = bin2hex(random_bytes(32));
-        $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
         $upd = $db->prepare(
-            "UPDATE password_resets SET status = 'approved', token = ?, expires_at = ?, updated_at = NOW() WHERE id = ?"
+            "UPDATE password_resets SET status = 'approved', token = ?, expires_at = DATE_ADD(NOW(), INTERVAL 2 HOUR), updated_at = NOW() WHERE id = ?"
         );
-        $upd->execute([$token, $expires, $id]);
+        $upd->execute([$token, $id]);
 
         $this->success(['token' => $token], 'Request approved');
     }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService, AdminUser, AdminPasswordResetRequest, DashboardData, AdminCrypto, SystemInfo } from '../../core/services/admin.service';
 import { ToastService } from '../../core/services/toast.service';
 
+import { AuthService } from '../../core/services/auth.service';
+
 interface NewUser {
   name: string;
   email: string;
@@ -80,8 +82,14 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private toast: ToastService
+    private toast: ToastService,
+    private authService: AuthService
   ) {}
+
+  isCurrentUser(userId: number): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    return currentUser ? currentUser.id === userId : false;
+  }
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -358,6 +366,26 @@ export class AdminComponent implements OnInit {
         this.toast.success('Utilizador restaurado');
       },
       error: () => { this.savingId = null; this.toast.error('Erro ao restaurar'); }
+    });
+  }
+
+  eliminateUser(user: AdminUser): void {
+    if (!confirm(`Tem a certeza que deseja ELIMINAR permanentemente o utilizador ${user.name}? Esta ação não pode ser desfeita.`)) {
+      return;
+    }
+
+    this.savingId = user.id;
+    this.adminService.eliminateUser(user.id).subscribe({
+      next: () => {
+        this.users = this.users.filter(u => u.id !== user.id);
+        this.applyFilter();
+        this.savingId = null;
+        this.toast.success('Utilizador eliminado permanentemente');
+      },
+      error: (err) => {
+        this.savingId = null;
+        this.toast.error(err?.error?.message || 'Erro ao eliminar utilizador');
+      }
     });
   }
 

@@ -110,6 +110,12 @@ export class AdminService {
       .pipe(map(() => undefined));
   }
 
+  eliminateUser(id: number): Observable<void> {
+    return this.http
+      .delete<ApiResponse<null>>(`${this.apiUrl}/users/${id}/eliminate`)
+      .pipe(map(() => undefined));
+  }
+
   restoreUser(id: number): Observable<AdminUser> {
     return this.http
       .post<ApiResponse<AdminUser>>(`${this.apiUrl}/users/${id}/restore`, {})

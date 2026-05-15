@@ -13,7 +13,7 @@ export class ResetPasswordComponent implements OnInit {
   loading = false;
   success = false;
   error = '';
-  token = '';
+  hasUrlToken = false;
 
   constructor(
     private fb: FormBuilder,
@@ -22,15 +22,17 @@ export class ResetPasswordComponent implements OnInit {
     private router: Router
   ) {
     this.form = this.fb.group({
+      token: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
-    this.token = this.route.snapshot.queryParamMap.get('token') || '';
-    if (!this.token) {
-      this.error = 'Token inválido ou expirado. Solicite um novo código.';
+    const urlToken = this.route.snapshot.queryParamMap.get('token') || '';
+    if (urlToken) {
+      this.hasUrlToken = true;
+      this.form.patchValue({ token: urlToken });
     }
   }
 
@@ -45,11 +47,12 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid || !this.token) return;
+    if (this.form.invalid) return;
     this.loading = true;
     this.error = '';
 
-    this.authService.resetPassword(this.token, this.form.value.password).subscribe({
+    const token = this.form.value.token;
+    this.authService.resetPassword(token, this.form.value.password).subscribe({
       next: () => {
         this.success = true;
         this.loading = false;
@@ -64,4 +67,5 @@ export class ResetPasswordComponent implements OnInit {
 
   get password() { return this.form.get('password'); }
   get confirmPassword() { return this.form.get('confirmPassword'); }
+  get token() { return this.form.get('token'); }
 }
