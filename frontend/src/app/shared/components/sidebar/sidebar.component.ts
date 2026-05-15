@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -11,14 +12,28 @@ export class SidebarComponent {
     @Output() onClose = new EventEmitter<void>();
 
     menuItems = [
-        { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-        { label: 'Criptomoedas', icon: 'crypto', route: '/cryptocurrencies' },
-        { label: 'Favoritos', icon: 'favorites', route: '/favorites' },
-        { label: 'Histórico', icon: 'history', route: '/history' },
-        { label: 'Exportar', icon: 'export', route: '/export' },
+        { labelKey: 'nav.dashboard', icon: 'dashboard', route: '/dashboard' },
+        { labelKey: 'nav.cryptocurrencies', icon: 'crypto', route: '/cryptocurrencies' },
+        { labelKey: 'nav.favorites', icon: 'favorites', route: '/favorites' },
+        { labelKey: 'nav.portfolio', icon: 'portfolio', route: '/portfolio' },
+        { labelKey: 'nav.history', icon: 'history', route: '/history' },
+        { labelKey: 'nav.export', icon: 'export', route: '/export' },
     ];
 
-    constructor(private router: Router) { }
+    constructor(
+        private router: Router,
+        private authService: AuthService
+    ) { }
+
+    get visibleMenuItems() {
+        const items = [...this.menuItems];
+
+        if (this.authService.isAdmin()) {
+            items.push({ labelKey: 'nav.admin', icon: 'admin', route: '/admin' });
+        }
+
+        return items;
+    }
 
     navigate(route: string): void {
         this.router.navigate([route]);
@@ -27,5 +42,11 @@ export class SidebarComponent {
 
     closeSidebar(): void {
         this.onClose.emit();
+    }
+
+    logout(): void {
+        this.authService.logout();
+        this.onClose.emit();
+        this.router.navigate(['/auth/login']);
     }
 }
