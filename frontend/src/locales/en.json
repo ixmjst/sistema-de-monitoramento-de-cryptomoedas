@@ -5,6 +5,7 @@
         "logout": "Logout",
         "register": "Register",
         "search": "Search",
+        "searchPlaceholder": "Search cryptocurrencies...",
         "home": "Home",
         "profile": "Profile",
         "settings": "Settings",
@@ -68,6 +69,8 @@
         "privacy": "Privacy",
         "terms": "Terms",
         "contact": "Contact",
+        "links": "Useful links:",
+        "description": "Professional cryptocurrency monitoring system with real-time insights.",
         "copyright": "All rights reserved",
         "developedBy": "Developed with ❤️ by DevTeam"
     }

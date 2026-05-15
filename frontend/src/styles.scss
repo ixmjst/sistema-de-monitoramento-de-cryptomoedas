@@ -2,52 +2,67 @@
    PALETA DE CORES - TEMA CRIPTOMOEDAS
    ======================================== */
 
-/* Cores Primárias - Tema Crypto */
+/* Cores Primárias - Tema Crypto Moderno */
 :root {
-    /* Cores Base - Dark Mode (padrão) */
-    --color-bg-primary: #070b1a;
-    --color-bg-secondary: #121d36;
-    --color-bg-tertiary: #1b2b4b;
-    --color-bg-hover: #2b3b63;
+    /* Shortcut aliases */
+    --bg: var(--color-bg-primary);
+    --text: var(--color-text-primary);
+    --muted: var(--color-text-tertiary);
+    --primary: var(--color-primary);
+    --surface: var(--layout-surface);
+    --border: var(--surface-border);
+
+    /* Dark Mode (padrão) - Paleta Moderna */
+    --color-bg-primary: #0B0F1A;
+    --color-bg-secondary: #111827;
+    --color-bg-tertiary: #1E293B;
+    --color-bg-hover: #253750;
 
     /* Cores de Texto */
-    --color-text-primary: #e8edf8;
-    --color-text-secondary: #9fb5d6;
-    --color-text-tertiary: #7b8db0;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #CAD5E2;
+    --color-text-tertiary: #96A5B8;
 
-    /* Cores Primárias - Gradiente Crypto */
-    --color-primary-light: #54c7ff;
-    --color-primary: #30a5ff;
-    --color-primary-dark: #1c72c0;
-    --color-accent: #5bf3d3;
+    /* Cores Primárias */
+    --color-primary-light: #60A5FA;
+    --color-primary: #3B82F6;
+    --color-primary-dark: #2563EB;
+    --color-accent: #F59E0B;
 
     /* Cores de Status */
-    --color-success: #00d084;
-    --color-warning: #ffb74d;
-    --color-error: #ff6b6b;
-    --color-info: #00b4ff;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+    --color-info: #3B82F6;
 
     /* Cores Bitcoin & Ethereum */
     --color-bitcoin: #f7931a;
     --color-ethereum: #627eea;
 
     /* Cores de Crescimento/Queda */
-    --color-gain: #00d084;
-    --color-loss: #ff6b6b;
+    --color-gain: #22C55E;
+    --color-loss: #EF4444;
 
     /* Gradientes */
-    --gradient-primary: linear-gradient(135deg, #30a5ff 0%, #5bf3d3 100%);
-    --gradient-success: linear-gradient(135deg, #00d084 0%, #00ffb3 100%);
-    --gradient-warning: linear-gradient(135deg, #ffb74d 0%, #ffa500 100%);
-    --gradient-error: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
-    --gradient-crypto: linear-gradient(135deg, #30a5ff 0%, #845bf2 60%, #5bf3d3 100%);
+    --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+    --gradient-success: linear-gradient(135deg, #34D399 0%, #6EE7B7 100%);
+    --gradient-warning: linear-gradient(135deg, #FBBF24 0%, #FDE047 100%);
+    --gradient-error: linear-gradient(135deg, #F87171 0%, #FCA5A5 100%);
+    --gradient-crypto: linear-gradient(135deg, #38BDF8 0%, #C084FC 50%, #F472B6 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
 
     /* Sombras */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
-    --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.25);
-    --shadow-glow: 0 0 20px rgba(0, 153, 255, 0.3);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.45);
+    --shadow-glow: 0 18px 44px rgba(59, 130, 246, 0.2);
+
+    --page-background: linear-gradient(180deg, #0B0F1A 0%, #111827 100%);
+    --layout-surface: rgba(30, 41, 59, 0.85);
+    --surface-border: rgba(148, 163, 184, 0.15);
+    --surface-highlight: rgba(59, 130, 246, 0.08);
+    --surface-hover: rgba(59, 130, 246, 0.12);
 
     /* Espaçamentos */
     --spacing-xs: 0.25rem;
@@ -61,7 +76,8 @@
     --radius-sm: 0.375rem;
     --radius-md: 0.5rem;
     --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
+    --radius-xl: 0.875rem;
+    --radius-2xl: 1rem;
     --radius-full: 9999px;
 
     /* Transições */
@@ -86,19 +102,46 @@
 
 /* Tema Claro */
 html[data-theme="light"] {
-    --color-bg-primary: #ffffff;
-    --color-bg-secondary: #f8f9fa;
-    --color-bg-tertiary: #e8ecf1;
-    --color-bg-hover: #dce4eb;
+    --color-bg-primary: #F8FAFC;
+    --color-bg-secondary: #FFFFFF;
+    --color-bg-tertiary: #F1F5F9;
+    --color-bg-hover: #E2E8F0;
 
-    --color-text-primary: #1a1a1a;
-    --color-text-secondary: #4a4a4a;
-    --color-text-tertiary: #7a7a7a;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #334155;
+    --color-text-tertiary: #64748B;
 
-    --color-primary-light: #0099ff;
-    --color-primary: #0066cc;
-    --color-primary-dark: #004499;
+    --color-primary-light: #3B82F6;
+    --color-primary: #2563EB;
+    --color-primary-dark: #1D4ED8;
+
+    --gradient-crypto: linear-gradient(135deg, #2563EB 0%, #7c3aed 100%);
+    --color-accent: #F59E0B;
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+    --page-background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+    --layout-surface: rgba(255, 255, 255, 0.92);
+    --surface-border: rgba(0, 0, 0, 0.08);
+    --surface-highlight: rgba(59, 130, 246, 0.06);
+    --surface-hover: rgba(59, 130, 246, 0.1);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.14);
+    --shadow-glow: 0 18px 44px rgba(37, 99, 235, 0.14);
 }
+
+html[data-theme="dark"] {
+    --bg: var(--color-bg-primary);
+    --text: var(--color-text-primary);
+    --muted: var(--color-text-tertiary);
+    --primary: var(--color-primary);
+    --surface: var(--layout-surface);
+    --border: var(--surface-border);
+}
+
 
 /* ========================================
    RESET E ESTILOS GLOBAIS
@@ -113,16 +156,47 @@ html[data-theme="light"] {
 html,
 body {
     height: 100%;
+    width: 100%;
+    max-width: 100%;
     font-family: var(--font-secondary);
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     transition: background-color var(--transition-base), color var(--transition-base);
     line-height: 1.6;
+    overflow-x: clip;
 }
 
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image: var(--page-background);
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 320px;
+}
+
+app-root,
+app-layout,
+app-navbar,
+app-dashboard,
+app-cryptocurrencies,
+app-favorites,
+app-history,
+app-export,
+app-admin,
+app-portfolio,
+app-overview {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+    letter-spacing: 0;
 }
 
 /* ========================================
@@ -204,15 +278,24 @@ button,
     border: none;
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
+    min-height: 2.5rem;
+    max-width: 100%;
+    min-width: 0;
+    white-space: nowrap;
 
     &:disabled {
-        opacity: 0.5;
+        opacity: 0.55;
         cursor: not-allowed;
+        transform: none;
+    }
+
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
     }
 }
 
@@ -220,9 +303,9 @@ button,
     background: var(--gradient-primary);
     color: white;
     box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 
     &:hover:not(:disabled) {
-        transform: translateY(-2px);
         box-shadow: var(--shadow-lg);
     }
 
@@ -231,15 +314,58 @@ button,
     }
 }
 
+.surface-card,
+.card {
+    background: var(--layout-surface);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(18px);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.surface-card:hover,
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(79, 70, 229, 0.24);
+}
+
+body::before {
+    content: none;
+}
+
 .btn-secondary {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-primary-light);
-    border: 2px solid var(--color-primary-light);
+    background: var(--layout-surface);
+    color: var(--color-primary);
+    border: 1px solid var(--surface-border);
 
     &:hover:not(:disabled) {
-        background-color: var(--color-primary-light);
-        color: var(--color-bg-primary);
+        background: var(--surface-hover);
+        color: var(--color-primary-dark);
+        box-shadow: var(--shadow-md);
     }
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-bottom: 1.75rem;
+}
+
+.page-header h1,
+.page-header h2,
+.page-header h3 {
+    margin: 0;
+    color: var(--color-text-primary);
+}
+
+.page-header p {
+    color: var(--color-text-secondary);
+    margin: 0.35rem 0 0;
 }
 
 .btn-success {
@@ -274,12 +400,13 @@ button,
 
 /* Cards */
 .card {
-    background-color: var(--color-bg-secondary);
-    border-radius: var(--radius-lg);
+    background: var(--layout-surface);
+    border-radius: var(--radius-xl);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-md);
     transition: all var(--transition-base);
-    border: 1px solid var(--color-bg-tertiary);
+    border: 1px solid var(--surface-border);
+    backdrop-filter: blur(16px);
 
     &:hover {
         box-shadow: var(--shadow-lg);
@@ -311,10 +438,12 @@ input,
 textarea,
 select {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     padding: var(--spacing-sm) var(--spacing-md);
     background-color: var(--color-bg-tertiary);
     color: var(--color-text-primary);
-    border: 1px solid var(--color-bg-hover);
+    border: 1px solid var(--surface-border);
     border-radius: var(--radius-md);
     font-family: var(--font-secondary);
     font-size: 0.95rem;
@@ -323,7 +452,8 @@ select {
     &:focus {
         outline: none;
         border-color: var(--color-primary-light);
-        box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+        background-color: var(--color-bg-secondary);
     }
 
     &:disabled {
@@ -343,6 +473,7 @@ select {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .badge-primary {
@@ -389,13 +520,15 @@ select {
    ======================================== */
 
 .container {
-    max-width: 1400px;
+    width: min(100%, 1400px);
     margin: 0 auto;
-    padding: 0 var(--spacing-lg);
+    padding: 0 clamp(var(--spacing-md), 2vw, var(--spacing-lg));
+    min-width: 0;
 }
 
 .flex {
     display: flex;
+    min-width: 0;
 
     &.flex-center {
         align-items: center;
@@ -427,17 +560,18 @@ select {
 .grid {
     display: grid;
     gap: var(--spacing-lg);
+    min-width: 0;
 
     &.grid-2 {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     &.grid-3 {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     &.grid-4 {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
@@ -548,6 +682,15 @@ select {
     }
 }
 
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 .fade-in {
     animation: fadeIn var(--transition-base);
 }
@@ -558,6 +701,18 @@ select {
 
 .pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skeleton loading */
+.skeleton {
+    background: linear-gradient(90deg,
+        var(--color-bg-tertiary) 25%,
+        var(--color-bg-hover) 50%,
+        var(--color-bg-tertiary) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--radius-md);
 }
 
 /* Responsivo */
@@ -572,11 +727,16 @@ select {
 
     .grid-3,
     .grid-4 {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .grid-2 {
         grid-template-columns: 1fr;
+    }
+
+    button,
+    .btn {
+        min-height: 2.75rem;
     }
 }
 
