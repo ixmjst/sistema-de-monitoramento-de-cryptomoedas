@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CryptoService, Cryptocurrency } from '../../core/services/crypto.service';
 import { FavoriteService } from '../../core/services/favorite.service';
-import { Subject } from 'rxjs';
-import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-cryptocurrencies',
@@ -19,14 +20,14 @@ export class CryptocurrenciesComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('');
   currentPage = 1;
   pageSize = 20;
-  totalItems = 0;
   sortField = 'marketCap';
   sortDirection: 'asc' | 'desc' = 'desc';
   favoriteIds: Set<string> = new Set();
 
   constructor(
     private cryptoService: CryptoService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -64,9 +65,12 @@ export class CryptocurrenciesComponent implements OnInit, OnDestroy {
   }
 
   loadFavorites(): void {
-    this.favoriteService.getFavorites().pipe(takeUntil(this.destroy$)).subscribe({
-      next: (favorites: any[]) => {
-        this.favoriteIds = new Set(favorites.map((f: any) => f.cryptoId || f.crypto_id));
+    // Subscreve aos favoritos diretamente (BehaviorSubject atualiza em tempo real)
+    this.favoriteService.getFavorites().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (favorites) => {
+        this.favoriteIds = new Set(favorites.map(f => f.crypto_code));
       }
     });
   }
@@ -90,7 +94,6 @@ export class CryptocurrenciesComponent implements OnInit, OnDestroy {
       this.sortField = field;
       this.sortDirection = 'desc';
     }
-
     this.filteredCryptos = [...this.filteredCryptos].sort((a, b) => {
       const aVal = (a as any)[field] || 0;
       const bVal = (b as any)[field] || 0;
@@ -99,19 +102,34 @@ export class CryptocurrenciesComponent implements OnInit, OnDestroy {
   }
 
   toggleFavorite(crypto: Cryptocurrency): void {
-    if (this.favoriteIds.has(crypto.id)) {
-      this.favoriteService.removeFavorite(crypto.id).subscribe(() => {
-        this.favoriteIds.delete(crypto.id);
+    const code = crypto.id;
+    if (this.favoriteIds.has(code)) {
+      this.favoriteService.removeFavorite(code).subscribe({
+        next: () => {
+          this.favoriteIds.delete(code);
+          this.favoriteIds = new Set(this.favoriteIds);
+          this.toast.success(`${crypto.name} removido dos favoritos`);
+        },
+        error: () => this.toast.error('Erro ao remover favorito')
       });
-    } else {
-      this.favoriteService.addFavorite(crypto.id).subscribe(() => {
-        this.favoriteIds.add(crypto.id);
-      });
+      return;
     }
+    // addFavorite agora com nome e símbolo para melhor UX
+    this.favoriteService.addFavorite(code, crypto.name, crypto.symbol, crypto.imageUrl).subscribe({
+      next: () => {
+        this.favoriteIds = new Set(this.favoriteIds).add(code);
+        this.toast.success(`${crypto.name} adicionado aos favoritos`);
+      },
+      error: () => this.toast.error('Erro ao adicionar favorito')
+    });
   }
 
   isFavorite(cryptoId: string): boolean {
     return this.favoriteIds.has(cryptoId);
+  }
+
+  trackByCode(_index: number, crypto: Cryptocurrency): string {
+    return crypto.id;
   }
 
   formatPrice(price: number): string {
@@ -132,7 +150,45 @@ export class CryptocurrenciesComponent implements OnInit, OnDestroy {
   }
 
   getSortIcon(field: string): string {
-    if (this.sortField !== field) return '↕';
-    return this.sortDirection === 'asc' ? '↑' : '↓';
+    if (this.sortField !== field) return '\u2195';
+    return this.sortDirection === 'asc' ? '\u2191' : '\u2193';
+  }
+
+  getSparklinePoints(crypto: Cryptocurrency, width = 170, height = 48): string {
+    const values = crypto.sparkline?.length ? crypto.sparkline.slice(-36) : this.createFallbackSparkline(crypto);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min || 1;
+    return values.map((value, index) => {
+      const x = (index / (values.length - 1)) * width;
+      const y = height - ((value - min) / range) * height;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(' ');
+  }
+
+  /**
+   * Calcula mudança de preço por hora (estimada como 1/24 da mudança de 24h)
+   * Este é um valor estimado baseado no change de 24h, não dados reais
+   */
+  getHourlyChange(crypto: Cryptocurrency): number {
+    return crypto.priceChange24h / 24;
+  }
+
+  /**
+   * Calcula mudança de preço por semana (estimada como variação média x 7 dias)
+   * Este é um valor estimado, não dados reais históricos
+   */
+  getWeeklyChange(crypto: Cryptocurrency): number {
+    // Extrapolação simples: assume que mudança média diária = 24h / 7
+    return (crypto.priceChange24h / 24) * 7;
+  }
+
+  private createFallbackSparkline(crypto: Cryptocurrency): number[] {
+    const base = crypto.currentPrice || 1;
+    return Array.from({ length: 36 }, (_, index) => {
+      const wave = Math.sin(index / 2.8) * base * 0.015;
+      const trend = (crypto.priceChange24h / 100) * base * (index / 35);
+      return base + wave + trend;
+    });
   }
 }
