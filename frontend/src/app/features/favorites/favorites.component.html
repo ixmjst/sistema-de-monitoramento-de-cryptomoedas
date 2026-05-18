@@ -1,55 +1,85 @@
 <div class="favorites-container">
   <div class="page-header">
-    <h1>{{ 'nav.favorites' | translate }}</h1>
-    <p class="text-muted">Your saved cryptocurrencies</p>
+    <div>
+      <h1>{{ 'nav.favorites' | translate }}</h1>
+      <p class="text-muted">{{ 'favorites.subtitle' | translate }}</p>
+    </div>
+    <span class="fav-count" *ngIf="!loading && favorites.length > 0">
+      {{ favorites.length }} moeda{{ favorites.length !== 1 ? 's' : '' }}
+    </span>
   </div>
 
+  <!-- Loading -->
   <div class="loading-container" *ngIf="loading">
     <div class="spinner"></div>
     <p>{{ 'common.loading' | translate }}</p>
   </div>
 
+  <!-- Empty -->
   <div class="empty-state" *ngIf="!loading && favorites.length === 0">
-    <h2>No favorites yet</h2>
-    <p>Go to <a routerLink="/cryptocurrencies">Cryptocurrencies</a> and star the ones you want to track.</p>
+    <div class="empty-icon">⭐</div>
+    <h2>{{ 'favorites.emptyTitle' | translate }}</h2>
+    <p>
+      {{ 'favorites.emptyText' | translate }}
+      <a routerLink="/cryptocurrencies">{{ 'nav.cryptocurrencies' | translate }}</a>
+    </p>
   </div>
 
+  <!-- Grid -->
   <div class="favorites-grid" *ngIf="!loading && favorites.length > 0">
-    <div class="favorite-card card" *ngFor="let fav of favorites">
-      <div class="card-header">
-        <div class="crypto-info">
-          <img [src]="fav.cryptocurrency?.imageUrl" [alt]="fav.cryptocurrency?.name" class="crypto-icon"
-            *ngIf="fav.cryptocurrency?.imageUrl">
-          <div class="crypto-icon-placeholder" *ngIf="!fav.cryptocurrency?.imageUrl">
-            {{ fav.cryptocurrency?.symbol?.charAt(0) || '?' }}
+    <div class="favorite-card card" *ngFor="let fav of favorites; trackBy: trackByCode">
+
+      <!-- Header: logo + nome + remove -->
+      <div class="fav-header">
+        <div class="fav-coin">
+          <div class="fav-logo-wrap">
+            <img
+              *ngIf="fav.image_url"
+              [src]="fav.image_url"
+              [alt]="fav.name"
+              class="fav-logo"
+              loading="lazy"
+              (error)="fav.image_url = ''" />
+            <div *ngIf="!fav.image_url" class="fav-logo-placeholder">
+              {{ fav.symbol?.charAt(0)?.toUpperCase() || '?' }}
+            </div>
           </div>
-          <div>
-            <h3>{{ fav.cryptocurrency?.name || 'Unknown' }}</h3>
-            <p class="text-muted">{{ fav.cryptocurrency?.symbol?.toUpperCase() }}</p>
+          <div class="fav-coin-info">
+            <h3>{{ fav.name || fav.crypto_code }}</h3>
+            <span class="fav-symbol">{{ fav.symbol?.toUpperCase() || fav.crypto_code.toUpperCase() }}</span>
           </div>
         </div>
-        <button class="btn-icon" (click)="removeFavorite(fav.cryptoId || fav.crypto_id)" title="Remove from favorites">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M8 7h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            <path d="M10 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            <path d="M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            <path d="M5 7h14l-1.5 12.5a1 1 0 0 1-1 0.9H7.5a1 1 0 0 1-1-0.9L5 7Z" stroke="currentColor"
-              stroke-width="1.8" stroke-linejoin="round" />
-            <path d="M9 7V5.5a1.5 1.5 0 0 1 1.5-1.5h3a1.5 1.5 0 0 1 1.5 1.5V7" stroke="currentColor" stroke-width="1.8"
-              stroke-linecap="round" />
+        <button class="btn-remove" (click)="removeFavorite(fav)" title="Remover dos favoritos" aria-label="Remover favorito">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 7h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M5 7h14l-1.5 12.5a1 1 0 0 1-1 .9H7.5a1 1 0 0 1-1-.9L5 7Z"
+              stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
         </button>
       </div>
-      <div class="card-body">
-        <div class="price-info">
-          <div class="price">{{ formatPrice(fav.cryptocurrency?.currentPrice || 0) }}</div>
-          <div [class]="'change ' + ((fav.cryptocurrency?.priceChange24h || 0) >= 0 ? 'positive' : 'negative')">
-            {{ (fav.cryptocurrency?.priceChange24h || 0) >= 0 ? '+' : '' }}
-            {{ (fav.cryptocurrency?.priceChange24h || 0).toFixed(2) }}%
-          </div>
-        </div>
-        <p class="notes text-muted" *ngIf="fav.notes">{{ fav.notes }}</p>
+
+      <!-- Price -->
+      <div class="fav-price-row">
+        <span class="fav-price">{{ formatPrice(fav.current_price || 0) }}</span>
+        <span class="fav-change"
+          [class.positive]="(fav.price_change_24h || 0) >= 0"
+          [class.negative]="(fav.price_change_24h || 0) < 0">
+          {{ (fav.price_change_24h || 0) >= 0 ? '+' : '' }}{{ (fav.price_change_24h || 0).toFixed(2) }}%
+        </span>
       </div>
+
+      <!-- Action: Ver Histórico -->
+      <button class="btn-history" (click)="viewHistory(fav)">
+        <svg viewBox="0 0 24 24" fill="none" width="15" height="15" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 17l5-5 4 4 9-9"/>
+        </svg>
+        Ver Histórico
+      </button>
+
     </div>
   </div>
 </div>
