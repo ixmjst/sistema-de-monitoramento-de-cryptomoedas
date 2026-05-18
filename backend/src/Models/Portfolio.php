@@ -8,7 +8,7 @@ class Portfolio extends BaseModel
 
     public function getUserPortfolio($userId)
     {
-        $sql = "SELECT p.*, c.name, c.code, c.symbol, c.current_price 
+        $sql = "SELECT p.*, c.name, c.code, c.symbol, c.current_price
                 FROM {$this->table} p
                 JOIN cryptocurrencies c ON p.crypto_id = c.id
                 WHERE p.user_id = ?
@@ -20,22 +20,19 @@ class Portfolio extends BaseModel
     public function addPortfolioItem($userId, $cryptoId, $quantity, $purchasePrice, $purchaseDate, $notes = null)
     {
         $data = [
-            'user_id' => $userId,
-            'crypto_id' => $cryptoId,
-            'quantity' => $quantity,
+            'user_id'        => $userId,
+            'crypto_id'      => $cryptoId,
+            'quantity'       => $quantity,
             'purchase_price' => $purchasePrice,
-            'purchase_date' => $purchaseDate,
-            'notes' => $notes,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'purchase_date'  => $purchaseDate,
+            'notes'          => $notes,
+            'created_at'     => date('Y-m-d H:i:s'),
         ];
-
         return $this->create($data);
     }
 
     public function updatePortfolioItem($id, $data)
     {
-        $data['updated_at'] = date('Y-m-d H:i:s');
         return $this->update($id, $data);
     }
 
@@ -53,10 +50,9 @@ class Portfolio extends BaseModel
 
     public function getUserPortfolioTotal($userId)
     {
-        $sql = "SELECT 
+        $sql = "SELECT
                 COUNT(id) as total_items,
-                SUM(quantity * purchase_price) as total_investment,
-                SUM(quantity * current_value) as current_total_value
+                SUM(quantity * purchase_price) as total_investment
                 FROM {$this->table}
                 WHERE user_id = ?";
         $stmt = $this->query($sql, [$userId]);
