@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 import { OverviewComponent } from './features/overview/overview.component';
 
 const routes: Routes = [
@@ -41,6 +42,17 @@ const routes: Routes = [
         path: 'history',
         loadChildren: () =>
           import('./features/history/history.module').then((m) => m.HistoryModule),
+      },
+      {
+        path: 'admin',
+        canActivate: [AdminGuard],
+        loadChildren: () =>
+          import('./features/admin/admin.module').then((m) => m.AdminModule),
+      },
+      {
+        path: 'portfolio',
+        loadChildren: () =>
+          import('./features/portfolio/portfolio.module').then((m) => m.PortfolioModule),
       },
       {
         path: 'export',

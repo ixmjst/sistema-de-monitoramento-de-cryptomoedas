@@ -23,6 +23,8 @@ class Router
         $this->routes['POST']['/auth/refresh'] = ['controller' => 'AuthController', 'method' => 'refresh'];
         $this->routes['POST']['/auth/logout'] = ['controller' => 'AuthController', 'method' => 'logout'];
         $this->routes['GET']['/auth/me'] = ['controller' => 'AuthController', 'method' => 'me'];
+        $this->routes['POST']['/auth/forgot-password'] = ['controller' => 'AuthController', 'method' => 'forgotPassword'];
+        $this->routes['POST']['/auth/reset-password'] = ['controller' => 'AuthController', 'method' => 'resetPassword'];
 
         // Cryptocurrency routes
         $this->routes['GET']['/cryptocurrencies'] = ['controller' => 'CryptoController', 'method' => 'list'];
@@ -32,7 +34,7 @@ class Router
         // Favorites routes
         $this->routes['GET']['/favorites'] = ['controller' => 'FavoriteController', 'method' => 'list'];
         $this->routes['POST']['/favorites'] = ['controller' => 'FavoriteController', 'method' => 'create'];
-        $this->routes['DELETE']['/favorites/(\d+)'] = ['controller' => 'FavoriteController', 'method' => 'delete'];
+        $this->routes['DELETE']['/favorites/(.+)'] = ['controller' => 'FavoriteController', 'method' => 'delete'];
 
         // Portfolio routes
         $this->routes['GET']['/portfolio'] = ['controller' => 'PortfolioController', 'method' => 'list'];
@@ -43,10 +45,28 @@ class Router
         // History routes
         $this->routes['GET']['/history'] = ['controller' => 'HistoryController', 'method' => 'list'];
         $this->routes['POST']['/history'] = ['controller' => 'HistoryController', 'method' => 'create'];
+        $this->routes['POST']['/history/import'] = ['controller' => 'HistoryController', 'method' => 'import'];
+        $this->routes['GET']['/history/stats'] = ['controller' => 'HistoryController', 'method' => 'stats'];
 
         // Export routes
         $this->routes['GET']['/export/csv'] = ['controller' => 'ExportController', 'method' => 'csv'];
         $this->routes['GET']['/export/pdf'] = ['controller' => 'ExportController', 'method' => 'pdf'];
+
+        // Admin routes
+        $this->routes['GET']['/admin/dashboard'] = ['controller' => 'AdminController', 'method' => 'dashboard'];
+        $this->routes['GET']['/admin/users'] = ['controller' => 'AdminController', 'method' => 'users'];
+        $this->routes['POST']['/admin/users'] = ['controller' => 'AdminController', 'method' => 'createUser'];
+        $this->routes['PUT']['/admin/users/(\d+)'] = ['controller' => 'AdminController', 'method' => 'updateUser'];
+        $this->routes['DELETE']['/admin/users/(\d+)'] = ['controller' => 'AdminController', 'method' => 'deleteUser'];
+        $this->routes['POST']['/admin/users/(\d+)/restore'] = ['controller' => 'AdminController', 'method' => 'restoreUser'];
+        $this->routes['GET']['/admin/cryptocurrencies'] = ['controller' => 'AdminController', 'method' => 'cryptocurrencies'];
+        $this->routes['POST']['/admin/cryptocurrencies'] = ['controller' => 'AdminController', 'method' => 'createCryptocurrency'];
+        $this->routes['PUT']['/admin/cryptocurrencies/(\d+)'] = ['controller' => 'AdminController', 'method' => 'updateCryptocurrency'];
+        $this->routes['DELETE']['/admin/cryptocurrencies/(\d+)'] = ['controller' => 'AdminController', 'method' => 'deleteCryptocurrency'];
+        $this->routes['GET']['/admin/system'] = ['controller' => 'AdminController', 'method' => 'systemInfo'];
+        $this->routes['GET']['/admin/password-reset-requests'] = ['controller' => 'AdminController', 'method' => 'getPasswordResetRequests'];
+        $this->routes['POST']['/admin/password-reset-requests/(\d+)/approve'] = ['controller' => 'AdminController', 'method' => 'approvePasswordResetRequest'];
+        $this->routes['GET']['/admin/logs/export'] = ['controller' => 'AdminController', 'method' => 'exportLogs'];
 
         // Health check
         $this->routes['GET']['/health'] = ['controller' => 'HealthController', 'method' => 'check'];
