@@ -2,3 +2,31 @@
     display: block;
     height: 100%;
 }
+
+.route-loader {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: grid;
+    place-items: center;
+    background: rgba(14, 23, 38, 0.18);
+    backdrop-filter: blur(2px);
+    pointer-events: none;
+}
+
+.route-loader-ring {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.45);
+    border-top-color: var(--color-primary);
+    border-right-color: var(--color-primary-light);
+    animation: routeSpin 0.75s linear infinite;
+    box-shadow: var(--shadow-lg);
+}
+
+@keyframes routeSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}

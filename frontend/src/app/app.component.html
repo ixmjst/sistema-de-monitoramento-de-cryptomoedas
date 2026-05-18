@@ -1,1 +1,6 @@
 <router-outlet></router-outlet>
+<app-toast-container></app-toast-container>
+<app-scroll-to-top></app-scroll-to-top>
+<div class="route-loader" *ngIf="routeLoading" aria-live="polite" aria-label="Carregando página">
+    <div class="route-loader-ring"></div>
+</div>
