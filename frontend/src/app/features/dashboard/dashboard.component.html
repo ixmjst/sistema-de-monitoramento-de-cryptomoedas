@@ -1,136 +1,89 @@
 <div class="dashboard-container">
+
+  <!-- HEADER -->
   <div class="dashboard-header">
     <div>
-      <span class="eyebrow">Painel</span>
+      <span class="eyebrow">{{ 'dashboard.eyebrow' | translate }}</span>
       <h1>{{ 'dashboard.title' | translate }}</h1>
-      <p class="text-muted">Visão completa das criptomoedas, posições guardadas e desempenho do mercado.</p>
+      <p class="text-muted">{{ 'dashboard.subtitle' | translate }}</p>
     </div>
     <div class="dashboard-header-actions">
-      <a routerLink="/cryptocurrencies" class="btn btn-secondary btn-sm">Explorar moedas</a>
-      <a routerLink="/favorites" class="btn btn-secondary btn-sm">Favoritos</a>
+      <a routerLink="/cryptocurrencies" class="btn btn-secondary btn-sm">{{ 'dashboard.explore' | translate }}</a>
+      <a routerLink="/history" class="btn btn-secondary btn-sm">{{ 'nav.history' | translate }}</a>
     </div>
   </div>
 
-  <section class="feature-grid">
-    <article class="feature-card">
-      <div class="feature-card-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M6 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M6 8h1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M10 18V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M14 18V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M18 18V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
+  <!-- PORTFOLIO STATS CARDS -->
+  <section class="portfolio-strip" *ngIf="!loading">
+    <div class="pf-card pf-card--favorites">
+      <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16l-6-4-6 4V4Z"/></svg></div>
+      <div class="pf-body">
+        <span class="pf-label">Moedas Seguidas</span>
+        <strong class="pf-value">{{ favoriteCount }}</strong>
       </div>
-      <div>
-        <h3>Visualização de preços</h3>
-        <p>Acompanhe cotações em tempo real e compare os principais ativos de forma clara.</p>
+    </div>
+    <div class="pf-card pf-card--portfolio">
+      <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20h16"/><path d="M8 16V10"/><path d="M12 16V6"/><path d="M16 16V13"/></svg></div>
+      <div class="pf-body">
+        <span class="pf-label">Volume 24h</span>
+        <strong class="pf-value">{{ formatMarketCap(totalVolume24h) }}</strong>
       </div>
-      <a routerLink="/cryptocurrencies" class="feature-link">Ver preços</a>
-    </article>
-    <article class="feature-card">
-      <div class="feature-card-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="11" r="5" stroke="currentColor" stroke-width="1.8" />
-          <path d="M16.5 16.5l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M8 8h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M8 11h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
+    </div>
+    <div class="pf-card pf-card--global">
+      <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></div>
+      <div class="pf-body">
+        <span class="pf-label">Variação Global 24h</span>
+        <strong class="pf-value" [class.positive]="globalChange24h >= 0" [class.negative]="globalChange24h < 0">
+          {{ globalChange24h >= 0 ? '+' : '' }}{{ globalChange24h | number:'1.1-1' }}%
+        </strong>
       </div>
-      <div>
-        <h3>Pesquisa de moedas</h3>
-        <p>Filtre por nome e símbolo para encontrar qualquer cripto rapidamente.</p>
+    </div>
+    <div class="pf-card pf-card--top">
+      <div class="pf-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M13 3c0 0 1.5 2.5 1 5-1 5-5 5-4 10"/><path d="M17 5c0 0 1 2 .5 4-.5 2-2 3-2 5s1 3 1 3"/></svg></div>
+      <div class="pf-body">
+        <span class="pf-label">Maior Valorização</span>
+        <strong class="pf-value" *ngIf="topGainerName">{{ topGainerName }} <span class="pf-change positive">+{{ topGainerChange | number:'1.1-1' }}%</span></strong>
       </div>
-      <a routerLink="/cryptocurrencies" class="feature-link">Buscar agora</a>
-    </article>
-    <article class="feature-card">
-      <div class="feature-card-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 4h12v16l-6-4-6 4V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
-          <path d="M9.5 10.5l1.5 1.75 2.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </div>
-      <div>
-        <h3>Favoritos e histórico</h3>
-        <p>Mantenha suas moedas preferidas e visualize movimentos anteriores do mercado.</p>
-      </div>
-      <a routerLink="/favorites" class="feature-link">Acessar favoritos</a>
-    </article>
-    <article class="feature-card">
-      <div class="feature-card-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 5h12v14H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
-          <path d="M9 9h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          <path d="M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
-      </div>
-      <div>
-        <h3>Exportação CSV/PDF</h3>
-        <p>Baixe relatórios práticos com seus dados de criptomoedas e histórico.</p>
-      </div>
-      <a routerLink="/export" class="feature-link">Exportar dados</a>
-    </article>
+    </div>
   </section>
 
+  <!-- MARKET STRIP -->
+  <section class="market-strip" *ngIf="!loading">
+    <div>
+      <span>{{ 'dashboard.marketCap' | translate }}</span>
+      <strong>{{ formatMarketCap(totalMarketCap) }}</strong>
+    </div>
+    <div>
+      <span>{{ 'market.volume24h' | translate }}</span>
+      <strong>{{ formatMarketCap(totalVolume24h) }}</strong>
+    </div>
+    <div>
+      <span>{{ 'market.dominance' | translate }}</span>
+      <strong *ngIf="marketTicker">BTC {{ marketTicker.btcDominance | number:'1.1-1' }}% / ETH {{ marketTicker.ethDominance | number:'1.1-1' }}%</strong>
+    </div>
+    <div>
+      <span>{{ 'market.coins' | translate }}</span>
+      <strong *ngIf="marketTicker">{{ marketTicker.totalCoins }}</strong>
+    </div>
+  </section>
+
+  <!-- LOADING -->
   <div class="loading-container" *ngIf="loading">
     <div class="spinner"></div>
     <p>{{ 'common.loading' | translate }}</p>
   </div>
 
-  <div class="dashboard-content" *ngIf="!loading">
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
-            <path d="M8 12h3l2 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-        <div class="stat-content">
-          <h3>{{ formatMarketCap(totalMarketCap) }}</h3>
-          <p>{{ 'dashboard.marketCap' | translate }}</p>
-        </div>
-      </div>
+  <!-- MAIN CONTENT -->
+  <ng-container *ngIf="!loading">
 
-      <div class="stat-card">
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 18V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            <path d="M12 18V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            <path d="M18 18V14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          </svg>
-        </div>
-        <div class="stat-content">
-          <h3>{{ formatMarketCap(totalVolume24h) }}</h3>
-          <p>{{ 'dashboard.volume24h' | translate }}</p>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M12 3a4 4 0 1 1 0 8a4 4 0 0 1 0-8Z" stroke="currentColor" stroke-width="1.8" />
-            <path d="M12 15a7 7 0 1 1 0-14a7 7 0 0 1 0 14Z" stroke="currentColor" stroke-width="1.8" />
-          </svg>
-        </div>
-        <div class="stat-content">
-          <h3>{{ recentCryptos.length }}</h3>
-          <p>Cryptocurrencies</p>
-        </div>
-      </div>
-    </div>
-
+    <!-- GAINERS / LOSERS -->
     <div class="gainers-losers-grid">
       <div class="card">
         <div class="card-header">
           <h2>
             <span class="card-title-icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M5 15l4-4 4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 15l4-4 4 4 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
             {{ 'dashboard.topGainers' | translate }}
@@ -138,7 +91,7 @@
         </div>
         <div class="card-body">
           <div class="crypto-list">
-            <div class="crypto-item" *ngFor="let crypto of topGainers">
+            <div class="crypto-item" *ngFor="let crypto of topGainers; trackBy: trackByCode">
               <div class="crypto-info">
                 <img [src]="crypto.imageUrl" [alt]="crypto.name" class="crypto-icon" *ngIf="crypto.imageUrl">
                 <div class="crypto-icon-placeholder" *ngIf="!crypto.imageUrl">{{ crypto.symbol.charAt(0) }}</div>
@@ -162,9 +115,8 @@
         <div class="card-header">
           <h2>
             <span class="card-title-icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M19 9l-4 4-4-4-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M19 9l-4 4-4-4-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
             {{ 'dashboard.topLosers' | translate }}
@@ -172,7 +124,7 @@
         </div>
         <div class="card-body">
           <div class="crypto-list">
-            <div class="crypto-item" *ngFor="let crypto of topLosers">
+            <div class="crypto-item" *ngFor="let crypto of topLosers; trackBy: trackByCode">
               <div class="crypto-info">
                 <img [src]="crypto.imageUrl" [alt]="crypto.name" class="crypto-icon" *ngIf="crypto.imageUrl">
                 <div class="crypto-icon-placeholder" *ngIf="!crypto.imageUrl">{{ crypto.symbol.charAt(0) }}</div>
@@ -193,21 +145,23 @@
       </div>
     </div>
 
-    <div class="card">
+    <!-- ANALYSIS TABLE -->
+    <div class="card analysis-card">
       <div class="card-header">
-        <h2>Top Cryptocurrencies</h2>
-        <a routerLink="/cryptocurrencies" class="btn btn-secondary btn-sm">View All</a>
+        <h2>{{ 'dashboard.comparisons' | translate }}</h2>
+        <a routerLink="/cryptocurrencies" class="btn btn-secondary btn-sm">{{ 'dashboard.viewAllBtn' | translate }}</a>
       </div>
       <div class="card-body">
         <div class="crypto-table">
           <div class="table-header">
             <div class="col-rank">#</div>
-            <div class="col-name">Name</div>
-            <div class="col-price">Price</div>
-            <div class="col-change">24h Change</div>
-            <div class="col-market-cap">Market Cap</div>
+            <div class="col-name">{{ 'crypto.name' | translate }}</div>
+            <div class="col-price">{{ 'crypto.price' | translate }}</div>
+            <div class="col-change">{{ 'crypto.change24h' | translate }}</div>
+            <div class="col-market-cap">{{ 'crypto.marketCap' | translate }}</div>
+            <div class="col-chart">7d</div>
           </div>
-          <div class="table-row" *ngFor="let crypto of recentCryptos; let i = index">
+          <div class="table-row" *ngFor="let crypto of recentCryptos; let i = index; trackBy: trackByCode">
             <div class="col-rank">{{ i + 1 }}</div>
             <div class="col-name">
               <img [src]="crypto.imageUrl" [alt]="crypto.name" class="crypto-icon" *ngIf="crypto.imageUrl">
@@ -224,9 +178,86 @@
               </span>
             </div>
             <div class="col-market-cap">{{ formatMarketCap(crypto.marketCap || 0) }}</div>
+            <div class="col-chart">
+              <svg class="sparkline" viewBox="0 0 150 52" preserveAspectRatio="none"
+                [class.negative]="crypto.priceChange24h < 0">
+                <polyline [attr.points]="getSparklinePoints(crypto)"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- LATEST CRYPTO NEWS -->
+    <section class="dash-news-section" *ngIf="latestNews.length">
+      <div class="dash-section-header">
+        <h2>
+          <span class="dash-section-icon dash-section-icon--news" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M7 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M7 12h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M7 16h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <circle cx="19" cy="5" r="3" fill="var(--color-primary)" stroke="var(--color-bg-primary)" stroke-width="1.2"/>
+            </svg>
+          </span>
+          {{ 'news.latestTitle' | translate }}
+        </h2>
+        <a href="#" class="view-more-link">{{ 'news.viewMoreNews' | translate }} &rsaquo;</a>
+      </div>
+      <div class="dash-news-grid">
+        <a class="dash-news-card" *ngFor="let article of latestNews; trackBy: trackByNewsId"
+           [href]="article.url" target="_blank" rel="noopener">
+          <div class="dash-news-image-wrap">
+            <img [src]="article.imageUrl" [alt]="article.title" class="dash-news-image" loading="lazy">
+            <span class="dash-news-source">
+              <app-news-source-icon [sourceSlug]="article.sourceSlug" [sourceName]="article.source"></app-news-source-icon>
+              <span class="source-label">{{ article.source }}</span>
+            </span>
+          </div>
+          <div class="dash-news-body">
+            <h3 class="dash-news-title">{{ article.title }}</h3>
+            <span class="dash-news-time">{{ newsService.formatTimeAgo(article.publishedAt) }}</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FEATURED ARTICLES -->
+    <section class="dash-articles-section" *ngIf="featuredArticles.length">
+      <div class="dash-section-header">
+        <h2>
+          <span class="dash-section-icon dash-section-icon--articles" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4l-4.8 2.5.9-5.4L4.2 7.7l5.4-.8L12 2z"
+                  stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          {{ 'news.featuredTitle' | translate }}
+        </h2>
+        <a href="#" class="view-more-link">{{ 'news.seeMoreArticles' | translate }} &rsaquo;</a>
+      </div>
+      <div class="dash-articles-grid">
+        <a class="dash-article-card" *ngFor="let article of featuredArticles; trackBy: trackByNewsId"
+           [href]="article.url" target="_blank" rel="noopener">
+          <div class="dash-article-image-wrap">
+            <img [src]="article.imageUrl" [alt]="article.title" class="dash-article-image" loading="lazy">
+          </div>
+          <div class="dash-article-body">
+            <span class="dash-article-tag" *ngIf="article.tag">{{ article.tag }}</span>
+            <h3 class="dash-article-title">{{ article.title }}</h3>
+            <div class="dash-article-meta">
+              <span class="dash-article-author" *ngIf="article.author">{{ article.author }}</span>
+              <span class="dash-article-rating" *ngIf="article.votes && article.votes > 0">
+                {{ article.rating | number:'1.2-2' }} ({{ article.votes }} {{ 'news.votes' | translate }})
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </ng-container>
+
 </div>
