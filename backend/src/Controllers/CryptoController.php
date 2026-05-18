@@ -28,7 +28,7 @@ class CryptoController extends BaseController
 
     public function detail($id)
     {
-        $crypto = $this->cryptoModel->getCryptoById($id);
+        $crypto = $this->cryptoModel->find($id);
 
         if (!$crypto) {
             return $this->error('Cryptocurrency not found', 404);
