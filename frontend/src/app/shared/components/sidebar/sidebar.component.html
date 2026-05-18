@@ -8,10 +8,11 @@
 
     <nav class="sidebar-nav">
         <div class="nav-section">
-            <h3 class="nav-title">Menu Principal</h3>
+            <h3 class="nav-title">{{ 'nav.mainMenu' | translate }}</h3>
             <ul class="nav-list">
-                <li *ngFor="let item of menuItems" class="nav-item">
-                    <button class="nav-link" (click)="navigate(item.route)">
+                <li *ngFor="let item of visibleMenuItems" class="nav-item">
+                    <button class="nav-link" [routerLink]="item.route" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }" (click)="navigate(item.route)">
                         <span class="nav-icon" [ngSwitch]="item.icon">
                             <svg *ngSwitchCase="'dashboard'" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -35,14 +36,24 @@
                                 <path d="M4 12a8 8 0 1 1 8 8" />
                                 <path d="M12 4v8h8" />
                             </svg>
+                            <svg *ngSwitchCase="'portfolio'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2" />
+                                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                            </svg>
                             <svg *ngSwitchCase="'export'" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 3v12" />
                                 <path d="M8 11l4 4 4-4" />
                                 <path d="M4 21h16" />
                             </svg>
+                            <svg *ngSwitchCase="'admin'" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3l7 3v5c0 4.5-2.8 8.4-7 10c-4.2-1.6-7-5.5-7-10V6l7-3Z" />
+                                <path d="M9 12l2 2l4-4" />
+                            </svg>
                         </span>
-                        <span class="nav-label">{{ item.label }}</span>
+                        <span class="nav-label">{{ item.labelKey | translate }}</span>
                     </button>
                 </li>
             </ul>
@@ -50,13 +61,13 @@
     </nav>
 
     <div class="sidebar-footer">
-        <button class="sidebar-logout">
+        <button class="sidebar-logout" (click)="logout()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 <polyline points="16 17 21 12 16 7"></polyline>
                 <line x1="21" y1="12" x2="9" y2="12"></line>
             </svg>
-            <span>Logout</span>
+            <span>{{ 'common.logout' | translate }}</span>
         </button>
     </div>
 </aside>
