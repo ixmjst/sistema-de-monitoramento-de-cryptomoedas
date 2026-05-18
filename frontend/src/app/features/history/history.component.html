@@ -1,53 +1,229 @@
 <div class="history-container">
+
+  <!-- PAGE HEADER -->
   <div class="page-header">
-    <h1>📈 {{ 'nav.history' | translate }}</h1>
-    <p class="text-muted">Your activity history</p>
+    <div>
+      <span class="eyebrow">Histórico</span>
+      <h1>Histórico de Preços</h1>
+      <p class="text-muted">Gráficos de preço e métricas de mercado.</p>
+    </div>
+    <!-- Export buttons -->
+    <div class="export-actions" *ngIf="selectedCoin && pricePoints.length">
+      <button class="btn btn-secondary btn-sm" (click)="exportCSV()" [disabled]="exporting" title="Exportar CSV">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 21h16"/>
+        </svg>
+        CSV
+      </button>
+      <button class="btn btn-secondary btn-sm" (click)="exportExcel()" [disabled]="exporting" title="Exportar Excel">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/>
+          <path d="M14 2v6h6"/>
+        </svg>
+        Excel
+      </button>
+    </div>
   </div>
 
-  <div class="loading-container" *ngIf="loading">
-    <div class="spinner"></div>
-    <p>{{ 'common.loading' | translate }}</p>
+  <!-- Coin Search -->
+  <div class="coin-search-bar">
+    <div class="search-wrap">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M16.5 16.5l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <input
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Pesquisar moeda (ex: bitcoin, ethereum...)"
+        class="coin-search-input"
+        autocomplete="off" />
+      <div class="search-dropdown" *ngIf="searchResults.length">
+        <button
+          class="search-result-item"
+          *ngFor="let coin of searchResults"
+          (click)="selectCoin(coin)">
+          <img [src]="coin.imageUrl" [alt]="coin.name" class="result-icon" *ngIf="coin.imageUrl">
+          <div class="result-icon-placeholder" *ngIf="!coin.imageUrl">{{ coin.symbol.charAt(0) }}</div>
+          <span class="result-name">{{ coin.name }}</span>
+          <span class="result-symbol">{{ coin.symbol.toUpperCase() }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Period selector -->
+    <div class="period-selector">
+      <button
+        *ngFor="let p of periods"
+        class="period-btn"
+        [class.active]="selectedPeriod === p.value"
+        (click)="selectPeriod(p.value)">
+        {{ p.label }}
+      </button>
+    </div>
   </div>
 
-  <div class="empty-state" *ngIf="!loading && history.length === 0">
-    <div class="empty-icon">📈</div>
-    <h2>No history yet</h2>
-    <p>Your activity will appear here</p>
+  <!-- Selected coin header -->
+  <div class="coin-header card" *ngIf="selectedCoin">
+    <div class="coin-header-info">
+      <img [src]="selectedCoin.imageUrl" [alt]="selectedCoin.name" class="coin-logo" *ngIf="selectedCoin.imageUrl">
+      <div class="coin-logo-placeholder" *ngIf="!selectedCoin.imageUrl">{{ selectedCoin.symbol.charAt(0) }}</div>
+      <div>
+        <h2>{{ selectedCoin.name }}</h2>
+        <span class="coin-symbol">{{ selectedCoin.symbol.toUpperCase() }}</span>
+      </div>
+    </div>
+    <div class="coin-header-price" *ngIf="coinMetrics">
+      <span class="current-price">{{ formatPrice(coinMetrics.currentPrice) }}</span>
+      <span [class]="'price-change ' + changeClass(coinMetrics.change24h)">
+        {{ formatChange(coinMetrics.change24h) }} (24h)
+      </span>
+    </div>
   </div>
 
-  <div class="history-timeline" *ngIf="!loading && history.length > 0">
-    <div class="history-item" *ngFor="let item of history">
-      <div class="history-card card">
-        <div class="history-header">
-          <div class="action-info">
-            <span class="action-icon">{{ getActionIcon(item.action) }}</span>
-            <div>
-              <h3>{{ item.action | titlecase }}</h3>
-              <p class="text-muted">{{ item.cryptocurrency?.name || 'Unknown' }}</p>
-            </div>
-          </div>
-          <span class="timestamp">{{ formatDate(item.createdAt || item.created_at) }}</span>
+  <!-- Chart -->
+  <div class="chart-card card" *ngIf="selectedCoin">
+    <div class="chart-header">
+      <span class="chart-range">{{ chartStartDate }} → {{ chartEndDate }}</span>
+      <div class="chart-price-range" *ngIf="pricePoints.length">
+        <span class="chart-low">Min: {{ formatPrice(chartMinPrice) }}</span>
+        <span class="chart-high">Max: {{ formatPrice(chartMaxPrice) }}</span>
+      </div>
+    </div>
+
+    <div class="chart-loading" *ngIf="loadingChart">
+      <div class="spinner"></div>
+      <span>A carregar gráfico...</span>
+    </div>
+
+    <div class="chart-empty" *ngIf="!loadingChart && !pricePoints.length">
+      <p>Sem dados disponíveis para este período.</p>
+    </div>
+
+    <div class="chart-wrap" *ngIf="!loadingChart && pricePoints.length">
+      <svg
+        class="price-chart"
+        [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight"
+        preserveAspectRatio="none">
+        <defs>
+          <linearGradient [id]="'chartGrad'" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" [attr.stop-color]="chartIsPositive ? '#22C55E' : '#EF4444'" stop-opacity="0.25"/>
+            <stop offset="100%" [attr.stop-color]="chartIsPositive ? '#22C55E' : '#EF4444'" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <polygon
+          [attr.points]="chartPoints + ' ' + chartWidth + ',' + chartHeight + ' 0,' + chartHeight"
+          [attr.fill]="'url(#chartGrad)'"/>
+        <polyline
+          [attr.points]="chartPoints"
+          fill="none"
+          [attr.stroke]="chartIsPositive ? '#22C55E' : '#EF4444'"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div class="metrics-grid" *ngIf="coinMetrics && !loadingMetrics">
+
+    <div class="metric-section card">
+      <h3 class="metric-section-title">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <path d="M3 17l5-5 4 4 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Variação de Preço
+      </h3>
+      <div class="metric-rows">
+        <div class="metric-row">
+          <span class="metric-label">24 horas</span>
+          <span [class]="'metric-value ' + changeClass(coinMetrics.change24h)">{{ formatChange(coinMetrics.change24h) }}</span>
         </div>
-        <div class="history-details">
-          <div class="detail-item" *ngIf="item.oldValue">
-            <label>Old Value</label>
-            <div class="value">${{ item.oldValue }}</div>
-          </div>
-          <div class="detail-item" *ngIf="item.newValue">
-            <label>New Value</label>
-            <div class="value">${{ item.newValue }}</div>
-          </div>
-          <div class="detail-item" *ngIf="item.quantity">
-            <label>Quantity</label>
-            <div class="value">{{ item.quantity }}</div>
-          </div>
-          <div class="detail-item" *ngIf="item.price">
-            <label>Price</label>
-            <div class="value">${{ item.price }}</div>
+        <div class="metric-row">
+          <span class="metric-label">7 dias</span>
+          <span [class]="'metric-value ' + changeClass(coinMetrics.change7d)">{{ formatChange(coinMetrics.change7d) }}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">30 dias</span>
+          <span [class]="'metric-value ' + changeClass(coinMetrics.change30d)">{{ formatChange(coinMetrics.change30d) }}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">1 ano</span>
+          <span [class]="'metric-value ' + changeClass(coinMetrics.change1y)">{{ formatChange(coinMetrics.change1y) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-section card">
+      <h3 class="metric-section-title">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4l-4.8 2.5.9-5.4L4.2 7.7l5.4-.8L12 2z"
+            stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        </svg>
+        Máximos e Mínimos
+      </h3>
+      <div class="metric-rows">
+        <div class="metric-row">
+          <span class="metric-label">ATH (Máximo histórico)</span>
+          <div class="metric-value-stack">
+            <span class="metric-value positive">{{ formatPrice(coinMetrics.ath) }}</span>
+            <span class="metric-sub">{{ priceHistoryService.formatDate(coinMetrics.athDate) }}</span>
           </div>
         </div>
-        <p class="description" *ngIf="item.description">{{ item.description }}</p>
+        <div class="metric-row">
+          <span class="metric-label">ATL (Mínimo histórico)</span>
+          <div class="metric-value-stack">
+            <span class="metric-value negative">{{ formatPrice(coinMetrics.atl) }}</span>
+            <span class="metric-sub">{{ priceHistoryService.formatDate(coinMetrics.atlDate) }}</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Máxima 24h</span>
+          <span class="metric-value">{{ formatPrice(coinMetrics.high24h) }}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Mínima 24h</span>
+          <span class="metric-value">{{ formatPrice(coinMetrics.low24h) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-section card">
+      <h3 class="metric-section-title">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M8 12h3l2 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Dados de Mercado
+      </h3>
+      <div class="metric-rows">
+        <div class="metric-row">
+          <span class="metric-label">Cap. de Mercado</span>
+          <span class="metric-value">{{ formatMarketCap(coinMetrics.marketCap) }}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Volume 24h</span>
+          <span class="metric-value">{{ formatMarketCap(coinMetrics.volume24h) }}</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Preço atual</span>
+          <span class="metric-value">{{ formatPrice(coinMetrics.currentPrice) }}</span>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Metrics loading -->
+  <div class="loading-container" *ngIf="loadingMetrics">
+    <div class="spinner"></div>
+    <p>A carregar métricas...</p>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!selectedCoin && !loadingChart">
+    <h2>Selecione uma moeda</h2>
+    <p>Pesquise uma criptomoeda para ver o histórico de preços.</p>
+  </div>
+
 </div>
