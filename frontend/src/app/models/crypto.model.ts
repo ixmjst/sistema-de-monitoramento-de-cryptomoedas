@@ -21,12 +21,15 @@ export interface Cryptocurrency {
 
 export interface Favorite {
   id: number;
-  userId: number;
-  cryptoId: string;
-  notes?: string;
-  alertPrice?: number;
-  createdAt: string;
-  cryptocurrency?: Cryptocurrency;
+  user_id: number;
+  crypto_code: string;
+  name?: string;
+  symbol?: string;
+  current_price?: number;
+  price_change_24h?: number;
+  image_url?: string;
+  market_cap?: number;
+  created_at: string;
 }
 
 export interface PortfolioItem {
