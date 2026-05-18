@@ -7,6 +7,9 @@ export interface User {
     id?: number;
     email: string;
     name: string;
+    role?: 'admin' | 'user';
+    language?: string;
+    theme?: string;
     token?: string;
 }
 
@@ -37,7 +40,7 @@ export class AuthService {
 
     login(email: string, password: string): Observable<{ token: string; user: User }> {
         return this.http.post<ApiResponse<{ token: string; user: User }>>(`${this.apiUrl}/login`, {
-            email,
+            email: email.trim().toLowerCase(),
             password,
         }).pipe(
             map(response => response.data),
@@ -46,7 +49,10 @@ export class AuthService {
     }
 
     register(user: { name: string; email: string; password: string }): Observable<{ token: string; user: User }> {
-        return this.http.post<ApiResponse<{ token: string; user: User }>>(`${this.apiUrl}/register`, user).pipe(
+        return this.http.post<ApiResponse<{ token: string; user: User }>>(`${this.apiUrl}/register`, {
+            ...user,
+            email: user.email.trim().toLowerCase()
+        }).pipe(
             map(response => response.data),
             tap(data => this.setSession(data))
         );
@@ -74,5 +80,34 @@ export class AuthService {
 
     isAuthenticated(): boolean {
         return !!this.getToken();
+    }
+
+    isAdmin(): boolean {
+        return this.getCurrentUser()?.role === 'admin';
+    }
+
+    forgotPassword(email: string): Observable<{ message: string }> {
+        return this.http.post<ApiResponse<{ message: string }>>(`${this.apiUrl}/forgot-password`, {
+            email: email.trim().toLowerCase()
+        }).pipe(map(response => response.data));
+    }
+
+    resetPassword(token: string, password: string): Observable<{ message: string }> {
+        return this.http.post<ApiResponse<{ message: string }>>(`${this.apiUrl}/reset-password`, {
+            token,
+            password
+        }).pipe(map(response => response.data));
+    }
+
+    updateProfile(data: Partial<User>): Observable<User> {
+        return this.http.put<ApiResponse<User>>(`${this.apiUrl}/profile`, data).pipe(
+            map(response => response.data),
+            tap(user => {
+                const current = this.getCurrentUser();
+                const updated = { ...current, ...user };
+                localStorage.setItem('user', JSON.stringify(updated));
+                this.userSubject.next(updated);
+            })
+        );
     }
 }
