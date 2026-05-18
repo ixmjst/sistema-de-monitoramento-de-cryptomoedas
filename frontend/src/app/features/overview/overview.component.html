@@ -1,61 +1,182 @@
-﻿<div class="overview-page">
+<div class="overview-page" #overviewPage>
+    <header class="overview-topbar">
+        <a class="overview-brand" routerLink="/">
+            <span class="brand-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3.5 7v10L12 22l8.5-5V7L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    <path d="M7 15.5v-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    <path d="M10.5 15.5V9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    <path d="M14 15.5V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                    <circle cx="17.5" cy="7" r="1.5" fill="currentColor" />
+                    <path d="M7 12c1.5-1.5 2.5-2.5 3.5-2.5s2.5-2.5 3.5-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2 2" />
+                </svg>
+            </span>
+            <span>CryptoMonitor</span>
+        </a>
+        <div class="overview-controls">
+            <app-theme-switch></app-theme-switch>
+            <app-language-switch></app-language-switch>
+        </div>
+    </header>
+
+    <app-market-ticker></app-market-ticker>
+
+    <!-- ── HERO ── -->
     <section class="hero">
         <div class="hero-copy">
             <span class="eyebrow">CryptoMonitor</span>
-            <h1>Mercado de criptomoedas em tempo real</h1>
-            <p>Explore preços, volume, tendência e indicadores de mercado antes de entrar na sua conta.</p>
+            <h1>{{ 'overview.heroTitle' | translate }}</h1>
+            <p>{{ 'overview.heroText' | translate }}</p>
+            <div class="hero-triggers">
+                <span>{{ 'overview.triggerFavorites' | translate }}</span>
+                <span>{{ 'overview.triggerHistory' | translate }}</span>
+                <span>{{ 'overview.triggerReports' | translate }}</span>
+            </div>
             <div class="hero-actions">
-                <a routerLink="/auth/login" class="btn btn-primary">Fazer login</a>
-                <a routerLink="/auth/register" class="btn btn-secondary">Criar conta</a>
+                <a routerLink="/auth/login" class="btn btn-primary">{{ 'overview.login' | translate }}</a>
+                <a routerLink="/auth/register" class="btn btn-secondary">{{ 'overview.register' | translate }}</a>
             </div>
         </div>
+
+        <aside class="hero-panel">
+            <div class="panel-kicker">{{ 'overview.panelKicker' | translate }}</div>
+            <h2>{{ 'overview.panelTitle' | translate }}</h2>
+            <p>{{ 'overview.panelText' | translate }}</p>
+            <div class="panel-list">
+                <div>
+                    <strong>{{ topGainers.length || 5 }}</strong>
+                    <span>{{ 'overview.topGainers' | translate }}</span>
+                </div>
+                <div>
+                    <strong>{{ formatMarketCap(totalVolume24h) }}</strong>
+                    <span>{{ 'market.volume24h' | translate }}</span>
+                </div>
+            </div>
+            <a routerLink="/auth/register" class="panel-cta">{{ 'overview.panelCta' | translate }}</a>
+        </aside>
     </section>
+
+    <!-- ── METRICS ── -->
     <section class="metrics-section">
         <div class="metric-card">
-            <span>Total Market Cap</span>
+            <span>{{ 'market.marketCap' | translate }}</span>
             <strong>{{ formatMarketCap(totalMarketCap) }}</strong>
         </div>
         <div class="metric-card">
-            <span>Volume 24h</span>
+            <span>{{ 'market.volume24h' | translate }}</span>
             <strong>{{ formatMarketCap(totalVolume24h) }}</strong>
         </div>
         <div class="metric-card">
-            <span>Top ganhos</span>
+            <span>{{ 'overview.topGainers' | translate }}</span>
             <strong>{{ topGainers.length }}</strong>
         </div>
         <div class="metric-card">
-            <span>Top perdas</span>
+            <span>{{ 'overview.topLosers' | translate }}</span>
             <strong>{{ topLosers.length }}</strong>
         </div>
     </section>
-    <section class="insights-section">
-        <div class="insights-intro">
-            <h2>Visão geral completa</h2>
-            <p>Busque, filtre e compare criptomoedas com informações de preço, volume e valor de mercado.</p>
+
+    <!-- ── TRENDING + TOP GAINERS + TOP LOSERS ── -->
+    <section class="trending-section" *ngIf="!loading && topGainers.length">
+        <div class="trending-col">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon-trending" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 3c0 0 1.5 2.5 1 5-1 5-5 5-4 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                            <path d="M17 5c0 0 1 2 .5 4-.5 2-2 3-2 5s1 3 1 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".6"/>
+                            <path d="M9 7c0 0 .5 1.5 0 3s-2 2.5-2 4.5 1.5 3.5 1.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".4"/>
+                        </svg>
+                    </span>
+                    {{ 'market.trending' | translate }}
+                </h2>
+                <a routerLink="/auth/login" class="view-more-link">{{ 'market.viewMore' | translate }} &rsaquo;</a>
+            </div>
+            <div class="trending-list">
+                <div class="trending-item" *ngFor="let coin of topGainers.slice(0, 3)">
+                    <div class="trending-coin-info">
+                        <img [src]="coin.imageUrl" [alt]="coin.name" class="coin-thumb" *ngIf="coin.imageUrl">
+                        <div class="coin-thumb-placeholder" *ngIf="!coin.imageUrl">{{ coin.symbol.charAt(0) }}</div>
+                        <span class="coin-name">{{ coin.name }}</span>
+                    </div>
+                    <div class="trending-coin-price">
+                        <span class="coin-price">{{ formatPrice(coin.currentPrice) }}</span>
+                        <span [class]="coin.priceChange24h >= 0 ? 'change-up' : 'change-down'">
+                            {{ coin.priceChange24h >= 0 ? '▲' : '▼' }}
+                            {{ coin.priceChange24h | number:'1.1-1' }}%
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="insights-grid">
-            <div class="insight-card">
-                <h3>Monitoramento avançado</h3>
-                <p>Acesse dados de múltiplas moedas e acompanhe tendência de mercado.</p>
+
+        <div class="trending-col">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon-gainers" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 17l5-5 4 4 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15 7h5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    {{ 'market.topGainers' | translate }}
+                </h2>
+                <a routerLink="/auth/login" class="view-more-link">{{ 'market.viewMore' | translate }} &rsaquo;</a>
             </div>
-            <div class="insight-card">
-                <h3>Pesquisa inteligente</h3>
-                <p>Encontre qualquer cripto rapidamente por nome ou símbolo.</p>
+            <div class="trending-list">
+                <div class="trending-item" *ngFor="let coin of topGainers.slice(0, 3)">
+                    <div class="trending-coin-info">
+                        <img [src]="coin.imageUrl" [alt]="coin.name" class="coin-thumb" *ngIf="coin.imageUrl">
+                        <div class="coin-thumb-placeholder" *ngIf="!coin.imageUrl">{{ coin.symbol.charAt(0) }}</div>
+                        <span class="coin-name">{{ coin.name }}</span>
+                    </div>
+                    <div class="trending-coin-price">
+                        <span class="coin-price">{{ formatPrice(coin.currentPrice) }}</span>
+                        <span class="change-up">▲ {{ coin.priceChange24h | number:'1.1-1' }}%</span>
+                    </div>
+                </div>
             </div>
-            <div class="insight-card">
-                <h3>Interface profissional</h3>
-                <p>Design moderno com foco em leitura e usabilidade.</p>
+        </div>
+
+        <div class="trending-col">
+            <div class="section-header">
+                <h2>
+                    <span class="section-icon-losers" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 7l5 5 4-4 9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15 17h5v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    {{ 'market.topLosers' | translate }}
+                </h2>
+                <a routerLink="/auth/login" class="view-more-link">{{ 'market.viewMore' | translate }} &rsaquo;</a>
+            </div>
+            <div class="trending-list">
+                <div class="trending-item" *ngFor="let coin of topLosers.slice(0, 3)">
+                    <div class="trending-coin-info">
+                        <img [src]="coin.imageUrl" [alt]="coin.name" class="coin-thumb" *ngIf="coin.imageUrl">
+                        <div class="coin-thumb-placeholder" *ngIf="!coin.imageUrl">{{ coin.symbol.charAt(0) }}</div>
+                        <span class="coin-name">{{ coin.name }}</span>
+                    </div>
+                    <div class="trending-coin-price">
+                        <span class="coin-price">{{ formatPrice(coin.currentPrice) }}</span>
+                        <span class="change-down">▼ {{ coin.priceChange24h | number:'1.1-1' }}%</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- ── MARKET TABLE ── -->
     <section class="market-table-section">
         <div class="market-table-header">
             <div>
-                <h2>Principais criptomoedas</h2>
-                <p>Dados do mercado atual disponíveis sem login. Acesse o sistema completo após autenticar.</p>
+                <h2>{{ 'overview.marketTitle' | translate }}</h2>
+                <p>{{ 'overview.marketText' | translate }}</p>
             </div>
             <div class="search-box">
-                <input type="text" [formControl]="searchControl" placeholder="Buscar criptomoedas..." />
+                <input type="text" [formControl]="searchControl"
+                    [placeholder]="'overview.searchPlaceholder' | translate" />
             </div>
         </div>
         <div class="table-card" *ngIf="!loading">
@@ -64,10 +185,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Moeda</th>
-                            <th>Preço</th>
-                            <th>Variação 24h</th>
-                            <th>Market Cap</th>
+                            <th>{{ 'crypto.name' | translate }}</th>
+                            <th>{{ 'crypto.price' | translate }}</th>
+                            <th>{{ 'crypto.change24h' | translate }}</th>
+                            <th>{{ 'crypto.marketCap' | translate }}</th>
+                            <th>{{ 'overview.chart7d' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,6 +210,12 @@
                                 {{ crypto.priceChange24h >= 0 ? '+' : '' }}{{ crypto.priceChange24h.toFixed(2) }}%
                             </td>
                             <td>{{ formatMarketCap(crypto.marketCap || 0) }}</td>
+                            <td>
+                                <svg class="sparkline" viewBox="0 0 150 44" preserveAspectRatio="none"
+                                    [class.negative]="crypto.priceChange24h < 0">
+                                    <polyline [attr.points]="getSparklinePoints(crypto)" />
+                                </svg>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -95,7 +223,120 @@
         </div>
         <div class="loading-container" *ngIf="loading">
             <div class="spinner"></div>
-            <p>Carregando criptomoedas...</p>
+            <p>{{ 'overview.loading' | translate }}</p>
         </div>
     </section>
+
+    <!-- ── LATEST CRYPTO NEWS (depois da tabela) ── -->
+    <section class="news-section" *ngIf="latestNews.length">
+        <div class="section-header">
+            <h2>
+                <span class="section-icon-news" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                        <path d="M7 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M7 12h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M7 16h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <circle cx="19" cy="5" r="3" fill="var(--color-primary)" stroke="var(--color-bg-primary)" stroke-width="1.2"/>
+                    </svg>
+                </span>
+                {{ 'news.latestTitle' | translate }}
+            </h2>
+            <a routerLink="/auth/login" class="view-more-link">{{ 'news.viewMoreNews' | translate }} &rsaquo;</a>
+        </div>
+        <div class="news-grid">
+            <a class="news-card" *ngFor="let article of latestNews"
+               [href]="article.url" target="_blank" rel="noopener">
+                <div class="news-image-wrap">
+                    <img [src]="article.imageUrl" [alt]="article.title" class="news-image" loading="lazy">
+                    <span class="news-source-badge">
+                        <app-news-source-icon
+                            [sourceSlug]="article.sourceSlug"
+                            [sourceName]="article.source">
+                        </app-news-source-icon>
+                        <span class="source-name">{{ article.source }}</span>
+                    </span>
+                </div>
+                <div class="news-body">
+                    <h3 class="news-title">{{ article.title }}</h3>
+                    <span class="news-time">{{ newsService.formatTimeAgo(article.publishedAt) }}</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ── FEATURED ARTICLES ── -->
+    <section class="articles-section" *ngIf="featuredArticles.length">
+        <div class="section-header">
+            <h2>
+                <span class="section-icon-articles" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.4l-4.8 2.5.9-5.4L4.2 7.7l5.4-.8L12 2z"
+                            stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                {{ 'news.featuredTitle' | translate }}
+            </h2>
+            <a routerLink="/auth/login" class="view-more-link">{{ 'news.seeMoreArticles' | translate }} &rsaquo;</a>
+        </div>
+        <div class="articles-grid">
+            <a class="article-card" *ngFor="let article of featuredArticles"
+               [href]="article.url" target="_blank" rel="noopener">
+                <div class="article-image-wrap">
+                    <img [src]="article.imageUrl" [alt]="article.title" class="article-image" loading="lazy">
+                </div>
+                <div class="article-body">
+                    <span class="article-tag" *ngIf="article.tag">{{ article.tag }}</span>
+                    <h3 class="article-title">{{ article.title }}</h3>
+                    <div class="article-meta">
+                        <span class="article-author" *ngIf="article.author">{{ article.author }}</span>
+                        <span class="article-rating" *ngIf="article.votes && article.votes > 0">
+                            ⭐ {{ article.rating | number:'1.2-2' }}
+                            ({{ article.votes }} {{ 'news.votes' | translate }})
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ── FOOTER (pré-login) ── -->
+    <footer class="overview-footer">
+        <div class="overview-footer-inner">
+            <div class="overview-footer-brand">
+                <span class="overview-footer-logo">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M12 2L3.5 7v10L12 22l8.5-5V7L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                        <path d="M7 15.5v-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M10.5 15.5V9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <path d="M14 15.5V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                        <circle cx="17.5" cy="7" r="1.5" fill="currentColor" />
+                        <path d="M7 12c1.5-1.5 2.5-2.5 3.5-2.5s2.5-2.5 3.5-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2 2" />
+                    </svg>
+                </span>
+                <span class="overview-footer-name">CryptoMonitor</span>
+            </div>
+            <div class="overview-footer-links">
+                <a href="#">{{ 'footer.about' | translate }}</a>
+                <span>·</span>
+                <a href="#">{{ 'footer.privacy' | translate }}</a>
+                <span>·</span>
+                <a href="#">{{ 'footer.terms' | translate }}</a>
+                <span>·</span>
+                <a href="#">{{ 'footer.contact' | translate }}</a>
+            </div>
+            <div class="overview-footer-social">
+                <a href="#" title="Twitter" aria-label="Twitter">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="#" title="LinkedIn" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+                <a href="#" title="GitHub" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                </a>
+            </div>
+            <p class="overview-footer-copy">&copy; {{ currentYear }} CryptoMonitor. {{ 'footer.copyright' | translate }}.</p>
+        </div>
+    </footer>
 </div>
