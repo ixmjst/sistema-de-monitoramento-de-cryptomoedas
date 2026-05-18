@@ -3,16 +3,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, rgba(0, 212, 255, 0.16), transparent 40%), linear-gradient(135deg, #071125 0%, #111f36 100%);
+  background: transparent;
   padding: var(--spacing-lg);
 }
 
 .auth-card {
-  background: rgba(15, 26, 45, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-2xl, 1.25rem);
+  background: var(--layout-surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-xl);
   padding: var(--spacing-2xl);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 520px;
   animation: slideInUp 0.4s ease-out;
@@ -20,6 +20,25 @@
 
 .auth-header {
   margin-bottom: var(--spacing-xl);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: 0.8rem 1rem;
+  color: var(--color-primary-light);
+  border: 1px solid var(--surface-border);
+  background: var(--surface-hover);
+  transition: all var(--transition-fast);
+}
+
+.back-button:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-primary);
 }
 
 .auth-brand {
@@ -32,11 +51,11 @@
 .brand-mark {
   width: 58px;
   height: 58px;
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.18), rgba(0, 255, 179, 0.14));
-  color: white;
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--color-primary);
 }
 
 .brand-mark svg {
@@ -62,7 +81,7 @@
 
 .auth-header h1 {
   margin: 0;
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: 2.4rem;
   line-height: 1.05;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -92,16 +111,16 @@
     input {
       width: 100%;
       padding: var(--spacing-md);
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--surface-border);
       border-radius: var(--radius-md);
       color: var(--color-text-primary);
       font-size: 1rem;
       transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 
       &:focus {
-        border-color: rgba(0, 212, 255, 0.4);
-        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        border-color: var(--color-primary-light);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
       }
 
       &.error {
@@ -122,8 +141,8 @@
   }
 
   .error-alert {
-    background: rgba(255, 107, 107, 0.1);
-    border: 1px solid rgba(255, 107, 107, 0.22);
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.18);
     color: var(--color-error);
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
@@ -141,7 +160,7 @@
   text-align: center;
   margin-top: var(--spacing-xl);
   padding-top: var(--spacing-lg);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--surface-border);
 
   p {
     color: var(--color-text-secondary);
@@ -165,8 +184,90 @@
     padding: var(--spacing-xl);
   }
 
+  .auth-header h1 {
+    font-size: 2rem;
+  }
+
   .auth-brand {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* PC and Laptop height/width screen optimizations to prevent vertical scroll overflow */
+@media (max-height: 860px) {
+  .auth-container {
+    padding: clamp(10px, 3vh, 30px);
+  }
+  
+  .auth-card {
+    padding: clamp(20px, 4vh, 40px);
+    max-width: 480px;
+    margin: auto;
+  }
+  
+  .back-button {
+    margin-bottom: clamp(10px, 2vh, 20px);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+  
+  .auth-header {
+    margin-bottom: clamp(12px, 3vh, 24px);
+  }
+  
+  .auth-brand {
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .brand-mark {
+    width: 46px;
+    height: 46px;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  .auth-header h1 {
+    font-size: 1.85rem;
+  }
+  
+  .auth-description {
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+  
+  .auth-form {
+    .form-group {
+      margin-bottom: clamp(10px, 2vh, 20px);
+      
+      label {
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+      }
+      
+      input {
+        padding: clamp(8px, 1.5vh, 14px) var(--spacing-md);
+        font-size: 0.95rem;
+      }
+    }
+    
+    button[type="submit"] {
+      padding: clamp(8px, 1.5vh, 14px);
+      font-size: 0.95rem;
+    }
+  }
+  
+  .auth-footer {
+    margin-top: clamp(12px, 3vh, 24px);
+    padding-top: clamp(10px, 2vh, 20px);
+    font-size: 0.85rem;
+    
+    p {
+      margin-bottom: 0.25rem;
+    }
   }
 }

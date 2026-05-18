@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -18,7 +20,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -46,10 +50,17 @@ export class LoginComponent implements OnInit {
         this.router.navigate([this.returnUrl]);
       },
       error: (err) => {
-        this.error = err.error?.message || 'Login failed. Please check your credentials.';
+        const serverMsg = err.error?.message;
+        this.error = serverMsg
+          ? serverMsg
+          : this.translate.instant('auth.loginFailed');
         this.loading = false;
       }
     });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   get email() {
