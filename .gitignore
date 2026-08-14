@@ -45,3 +45,7 @@ database/*.sqlite
 
 # Docker
 docker/data/
+# Build do frontend e ficheiros temporarios de debug
+frontend/dist/
+backend/tmp_*.php
+._*

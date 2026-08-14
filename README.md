@@ -1,4 +1,17 @@
-# CryptoMonitor
+﻿# CryptoMonitor
+
+[![Angular](https://img.shields.io/badge/Angular-17-DD0031?logo=angular&logoColor=white)](https://angular.dev/)
+[![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?logo=php&logoColor=white)](https://www.php.net/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![JWT](https://img.shields.io/badge/Auth-JWT-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+
+> **English summary** â€” A full-stack cryptocurrency monitoring platform. Angular 17
+> frontend with light/dark themes, backed by a dependency-free PHP 8 REST API and MySQL.
+> Features JWT authentication, a favourites list, price history and data export, with
+> live market data from the CoinGecko API. Setup instructions below, in Portuguese.
+
+---
+
 
 Sistema web completo para monitoramento de criptomoedas com autenticação JWT, favoritos, histórico e exportação de dados.
 
